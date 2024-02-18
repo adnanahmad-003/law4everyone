@@ -7,6 +7,8 @@ import { Audio } from 'expo-av';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addString } from '../../../Redux/action';
+import { addStringAPI } from '../../../api/api';
+
 
 const LawQuery = () => {
 
@@ -17,13 +19,18 @@ const LawQuery = () => {
     const [newString, setNewString] = useState('');
 
     const handleAddString = () => {
-
         if (newString) {
-            dispatch(addString(newString));
-            setNewString('');
+            try {
+               // await addStringAPI(newString);
+                dispatch(addString(newString));
+                setNewString('');
+            } catch (error) {
+                // Handle error here
+                console.error('Error adding string:', error);
+            }
         }
-
     };
+
     //language selector drropdown
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -101,7 +108,7 @@ const LawQuery = () => {
 
     return (
 
-        < SafeAreaView style={{ marginTop: 30, flex: 1 }}>
+        < SafeAreaView style={{ marginTop: 10, flex: 1 }}>
 
             <View style={{ backgroundColor: COLORS.purple, padding: 8, marginHorizontal: 6, borderRadius: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 <View>

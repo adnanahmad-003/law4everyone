@@ -48,7 +48,6 @@ const Login = () => {
         source={require('../../assets/Images/Login.jpg')}
         style={{height:900}}
       >
-      <View style={{height:180}}></View>
      <View style={{marginTop:40}}>
       <Text style={{fontSize:31,textAlign:"center",fontWeight:"600",color:"white"}}>Login</Text>
       <View style={{flexDirection:"row",justifyContent:"space-evenly",alignItems:"center",marginTop:40}}>
