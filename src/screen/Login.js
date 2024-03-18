@@ -1,9 +1,15 @@
-import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable ,Keyboard} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable ,Keyboard,Alert} from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Input from '../components/Input';
 import Button from '../components/Botton';
+import * as SecureStore from 'expo-secure-store';
+
 const Login = () => {
+  const [responseData,setResponse]= useState({
+    message:'',
+    isSignedIn:false
+  });
   const navigation = useNavigation();
   const [isUser, setUser] = useState(false);
   const handleClick = () => {
@@ -11,10 +17,12 @@ const Login = () => {
   };
   
 
-  const [inputs, setInputs] = React.useState({email: '', password: ''});
+  const [inputs, setInputs] = React.useState({
+    email: '',
+   password: ''});
   const [errors, setErrors] = React.useState({});
   //const [loading, setLoading] = React.useState(false);
-
+  
   const validate = async () => {
     Keyboard.dismiss();
     let isValid = true;
@@ -27,10 +35,59 @@ const Login = () => {
       isValid = false;
     }
     if (isValid) {
-      //login();
+      login();
     }
   };
 
+  const login= async () => { 
+    try {
+      //setLoading(false);
+      const apiUrl = 'http://localhost:3000/user/signin';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        
+        body:JSON.stringify({user:inputs}),
+      });
+      
+      const jsonData = await response.json();
+      
+       console.log(jsonData,'login')
+       setResponse({message:jsonData.message,isSignedIn:jsonData.isSignedIn})
+      if(jsonData.isSignedIn){
+        navigation.navigate('Tabs');
+        await SecureStore.setItemAsync('authToken',jsonData.authToken);
+       const res= await SecureStore.getItemAsync('authToken');
+       
+       setResponse({message:jsonData.message,isSignedIn:jsonData.isSignedIn})
+       
+     }
+     else if((jsonData.message=='Wrong password')){
+      Alert.alert(
+        'Wrong Password',
+        jsonData.message,
+        [
+          {
+            text: 'OK',
+          },
+        ],
+        { cancelable: true }
+      );
+     }
+     else if(!(jsonData.isSignedIn) && (jsonData.message!='Wrong password')){
+      navigation.navigate('EmailVerification', { email: inputs.email , nextNavigate: 'tabs'})
+     }
+    
+     
+      
+    }
+     catch (error) {
+      console.log('Error', 'Something went wrong',{error});
+    }
+  };
 
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -58,6 +115,7 @@ const Login = () => {
         <View style={{borderColor: isUser ? 'transparent':'#7727C8',paddingHorizontal:14,paddingVertical:6,borderRadius:6,borderWidth:1}}><Text style={{fontSize:22,color:"white"}}>ADVOCATE</Text></View>
         </TouchableOpacity>
       </View>
+      {responseData.isSignedIn?null:<Text style={{color:"white"}}>{responseData.authToken}</Text>}
       <View style={{marginTop:50,marginHorizontal:20}}>
       
       

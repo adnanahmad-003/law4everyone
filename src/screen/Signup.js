@@ -1,17 +1,27 @@
-import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable,Keyboard, ScrollView } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable,Keyboard, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Input from '../components/Input';
 import Button from '../components/Botton';
 import COLORS from '../constants/Color';
 import Loader from '../components/Loader';
+//redux user 
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserData } from './../../Redux/action';
 const Signup = () => {
+  const userData = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
   const [inputs, setInputs] = React.useState({
-    email: '',
-    fullname: '',
-    phone: '',
-    password: '',
+    email: 'trendymodernvibes@gmail.com',
+    name: 'Adnan',
+    phone: 123,
+    password: '123456',
+  });
+  const[responseData,setResponse]=useState({
+    message:'',
+    isSignedUp:false
   });
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
@@ -28,9 +38,9 @@ const Signup = () => {
       isValid = false;
     }
 
-    if (!inputs.fullname) {
-      handleError('Please input fullname', 'fullname');
-      isValid = false;
+   if (!inputs.name) {
+      handleError('Please input fullname', 'name');
+     isValid = false;
     }
 
     if (!inputs.phone) {
@@ -48,20 +58,61 @@ const Signup = () => {
 
     if (isValid) {
       register();
-    }
+     }
+   
   };
 
-  const register = () => {
+  const register = async () => {
     setLoading(true);
-    setTimeout(() => {
+    setTimeout(async () => { 
+      //console.log(inputs)
       try {
-       setLoading(false);
-      
-        navigation.navigate('Login');
-      } catch (error) {
-        Alert.alert('Error', 'Something went wrong');
+        dispatch(
+          setUserData({
+            userName: inputs.name,
+            location: [],
+            email: inputs.email,
+            phone: inputs.phone,
+          })
+        );
+        setLoading(false);
+        const apiUrl = 'http://localhost:3000/user/signup';
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            
+          },
+          
+          body:JSON.stringify(inputs),
+        });
+        
+        const jsonData = await response.json();
+        setResponse(jsonData);
+         console.log(jsonData)
+        if(jsonData.isSignedUp){
+          navigation.navigate('EmailVerification', { email: inputs.email ,nextNavigate: 'login' })
+        }
+        else{
+          Alert.alert(
+            'Login Please',
+            jsonData.message,
+            [
+              {
+                text: 'OK',
+                onPress: () => navigation.navigate('Login'),
+              },
+            ],
+            { cancelable: false }
+          );
+        }
+       
+        
       }
-    }, 3000);
+       catch (error) {
+        console.log('Error', 'Something went wrong',{error});
+      }
+    }, 2000);
   };
 
   const handleOnchange = (text, input) => {
@@ -95,8 +146,8 @@ const Signup = () => {
           />
 
           <Input
-            onChangeText={text => handleOnchange(text, 'fullname')}
-            onFocus={() => handleError(null, 'fullname')}
+            onChangeText={text => handleOnchange(text, 'name')}
+            onFocus={() => handleError(null, 'name')}
             iconName="account-outline"
             label="Full Name"
             placeholder="Enter your full name"

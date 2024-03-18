@@ -1,24 +1,31 @@
 // api.js
-
-const BASE_URL = 'https://chatbot'; // Replace this with your actual API endpoint
+import * as SecureStore from 'expo-secure-store';
+//const BASE_URL = 'https://localhost:3000'; // Replace this with your actual API endpoint
 
 export const addStringAPI = async (newString) => {
     try {
-        const response = await fetch(`${BASE_URL}/lawbot/getResponse`, {
+        const token= await SecureStore.getItemAsync('authToken');
+       console.log(token);
+        const response = await fetch(`http://localhost:3000/lawbot/getResponse`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Add any other headers if needed
+                'Authorization':`Bearer ${token}`,
+                
             },
-            body: JSON.stringify({ string: newString }), // Assuming your API expects a JSON body with a 'string' property
+            body: JSON.stringify({ prompt: newString, chatId:1 }), 
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
 
         const data = await response.json();
-        return data; // Return the response data if needed
+        console.log(data)
+        console.log(data.message)
+        if(data.message)
+        return data.message; // Return the response data if needed
+        
+        else{
+            return data.response;
+        }
     } catch (error) {
         console.error('Error adding string:', error);
         throw error; // Rethrow the error to handle it where the API function is called
