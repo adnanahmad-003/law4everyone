@@ -4,8 +4,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 //redux
+import { addCaseAPI } from '../../../../api/api';
 import { useDispatch } from 'react-redux'; 
-import { addQuery } from '../../../../Redux/action'; 
+import { addQuery } from '../../../../Redux/action';
+
 const AddDeal = ({navigation}) => {
     const dispatch = useDispatch();
     const [queryTitle, setQueryTitle] = useState('');
@@ -21,14 +23,26 @@ const AddDeal = ({navigation}) => {
       { label: 'Closed', value: 'Closed' },
       { label: 'Withdraw', value: 'Withdraw' }])
   
-    const handleSaveQuery = () => {
+      const postData = {
+        queryTitle: queryTitle,
+        queryDetails: queryDetails,
+        endDate: lastDate.toISOString(),
+        status: status
+      };
+
+    const handleSaveQuery = async() => {
       if (!queryTitle || !queryDetails || !status) {
         setError('All fields are required');
         return;
       }
-      dispatch(addQuery(queryTitle, queryDetails, lastDate.toISOString()));
+      try {
+        const response = await addCaseAPI(postData);
+    } catch (error) {
+        console.error('Error adding string:', error);
+    }
+      dispatch(addQuery(queryTitle, queryDetails,lastDate.toISOString(),status));
       navigation.navigate('ActiveDealScreen');
-        };
+      };
     
   
     return (

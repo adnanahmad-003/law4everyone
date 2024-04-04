@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Keyboard, K, SafeAreaView, Platform, TouchableOpacity } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react'
-import DropDownPicker from 'react-native-dropdown-picker';
-import COLORS from '../../constants/Color';
+//import DropDownPicker from 'react-native-dropdown-picker';
+import COLORS from '../../../constants/Color';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import * as SecureStore from 'expo-secure-store';
 import { useDispatch, useSelector } from 'react-redux';
-import { addString } from '../../../Redux/action';
-import { addStringAPI } from '../../../api/api';
+import { addString } from '../../../../Redux/action';
+import { addStringAPI } from '../../../../api/api';
 import { AntDesign } from '@expo/vector-icons';
 import {
     AndroidAudioEncoder,
@@ -31,7 +31,7 @@ const LawQuery = () => {
         if (newString) {
             try {
                 const response = await addStringAPI(newString);
-                console.log(response);
+                //console.log(response);
                 setNewResponse(response);
                 dispatch(addString(newString, response));
                 setNewString('');
@@ -42,16 +42,6 @@ const LawQuery = () => {
             }
         }
     };
-
-    //language selector drropdown
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-        { label: 'English', value: 'English' },
-        { label: 'Hindi', value: 'Hindi' },
-        { label: 'Marathi', value: 'Marathi' },
-        { label: 'Gujrati', value: 'Gujrati' }
-    ]);
 
     //chats
     const RenderItem = ({ item }) => (<>
@@ -123,7 +113,7 @@ const LawQuery = () => {
         try {
             const token = await SecureStore.getItemAsync('authToken');
             const uri = recording.getURI();
-            console.log(uri,'1234')
+            //console.log(uri,'1234')
             const formData = new FormData();
             formData.append('audioPrompt', {
                 uri: uri,
@@ -196,19 +186,6 @@ const LawQuery = () => {
         < SafeAreaView style={{ marginTop: 10, flex: 1 }}>
 
             <View style={{ backgroundColor: COLORS.purple, padding: 8, marginHorizontal: 6, borderRadius: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                <View>
-                    <DropDownPicker
-                        open={open}
-                        value={value}
-                        items={items}
-                        setOpen={setOpen}
-                        setValue={setValue}
-                        setItems={setItems}
-                        placeholder="Select your language"
-                        style={{ width: "60%" }}
-                        dropDownContainerStyle={{ width: '60%', }}
-                    />
-                </View>
 
                 <View><Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", marginRight: 10 }}>Ask your question</Text></View>
             </View>

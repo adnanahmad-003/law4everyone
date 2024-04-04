@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View,SafeAreaView } from 'react-native';
-import StackNavigator from './StackNavigator';
+import AuthStackNavigator from './Navigators/Main/AuthNavigation'
 import { Provider } from 'react-redux';
 import store from './Redux/Store';
 export default function App() {
   return (
     <Provider store={store}>
     <SafeAreaView style={styles.container}>
-    <StackNavigator/>
+    <AuthStackNavigator/>
     <StatusBar style="auto" />
     </SafeAreaView>
     </Provider>

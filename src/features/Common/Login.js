@@ -1,11 +1,16 @@
 import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable ,Keyboard,Alert} from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import Input from '../components/Input';
-import Button from '../components/Botton';
+import Input from '../../components/Input';
+import Button from '../../components/Botton';
 import * as SecureStore from 'expo-secure-store';
+//user redux
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserData } from '../../../Redux/action';
 
 const Login = () => {
+  const userData = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [responseData,setResponse]= useState({
     message:'',
     isSignedIn:false
@@ -102,7 +107,7 @@ const Login = () => {
   return (
     <SafeAreaView style={{backgroundColor:"white",height:900}} >
     <ImageBackground
-        source={require('../../assets/Images/Login.jpg')}
+        source={require('../../../assets/Images/Login.jpg')}
         style={{height:900}}
       >
      <View style={{marginTop:40}}>

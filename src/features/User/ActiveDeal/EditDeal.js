@@ -2,22 +2,24 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateQuery } from '../../../../Redux/action';
-
+//import { useDispatch, useSelector } from 'react-redux';
+//import { updateQuery } from '../../../../Redux/action';
+import { updateCaseAPI } from '../../../../api/api';
 const EditDeal = ({ route, navigation }) => {
   const { queryId } = route.params;
-  const dispatch = useDispatch();
+  const {title}= route.params;
+  const {description}= route.params;
+ // const dispatch = useDispatch();
 
   // Access the query details from Redux store based on queryId
-  const query = useSelector(state =>
+  /*const query = useSelector(state =>
     state.deals.queries.find(query => query.id === queryId)
-  );
+  );*/
 
   // Initialize state with query details
-  const [queryTitle, setQueryTitle] = useState(query.title);
-  const [queryDetails, setQueryDetails] = useState(query.details);
-  const [lastDate, setLastDate] = useState(new Date(query.endDate));
+  const [queryTitle, setQueryTitle] = useState(title);
+  const [queryDetails, setQueryDetails] = useState(description);
+  const [lastDate, setLastDate] = useState(new Date());
   const [error, setError] = useState('');
 
   const [status, setStatus] = useState('');
@@ -29,17 +31,27 @@ const EditDeal = ({ route, navigation }) => {
     { label: 'Closed', value: 'Closed' },
     { label: 'Withdraw', value: 'Withdraw' }])
 
-
+    const postData = {
+      queryId :queryId,
+      queryTitle: queryTitle,
+      queryDetails: queryDetails,
+      endDate: lastDate.toISOString(),
+      status: status
+    };
   
-  const handleSaveQuery = () => {
+  const handleSaveQuery = async() => {
     if (!queryTitle || !queryDetails || !status) {
         setError('All fields are required');
         return;
       }
-    // Dispatch the updateQuery action with the updated data
-    dispatch(updateQuery(queryId, queryTitle, queryDetails, lastDate.toISOString(), status));
-    
-    navigation.goBack();
+      try {
+        const response = await updateCaseAPI(postData);
+    } catch (error) {
+        console.error('Error adding string:', error);
+    }
+
+    //dispatch(updateQuery(queryId, queryTitle, queryDetails, lastDate.toISOString(), status));
+    navigation.navigate("ActiveDealScreen");
   };
 
   return (

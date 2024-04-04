@@ -17,16 +17,17 @@ export const updateLocation = (location) => {
     payload: location,
   };
 };
-
-export const addQuery = (title, description, endDate) => ({
+// add query
+export const addQuery = (title, description, endDate , status) => ({
   type: 'ADD_QUERY',
   payload: {
     title,
     description,
     endDate,
+    status,
   },
 });
-
+//update query
 export const updateQuery = (queryId, newTitle, newDetails, newEndDate, newStatus) => ({
   type: 'UPDATE_QUERY',
   payload: {

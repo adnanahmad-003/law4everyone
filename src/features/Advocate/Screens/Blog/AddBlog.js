@@ -2,7 +2,7 @@ import React, { useState,useEffect} from 'react';
 import { View, Text, TextInput, Button, StyleSheet,Image, TouchableOpacity, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import COLORS from './../../../constants/Color'
+import COLORS from './../../../../constants/Color';
 
 const AddBlog = ({navigation}) => {
   const [title, setTitle] = useState('');

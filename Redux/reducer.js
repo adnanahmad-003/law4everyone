@@ -12,7 +12,6 @@ const initialState = {
   },
   queries: [],
 };
-
 const stringsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_STRING':
@@ -48,7 +47,7 @@ const userReducer = (state = initialState.user, action) => {
 const dealsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_QUERY':
-      const { title, description, endDate } = action.payload;
+      const { title, description, endDate,status } = action.payload;
       return {
         ...state,
         queries: [
@@ -58,7 +57,7 @@ const dealsReducer = (state = initialState, action) => {
             title: title,
             description: description,
             endDate: endDate,
-            status: 'Open', 
+            status: status, 
           },
         ],
       };
@@ -83,7 +82,7 @@ const dealsReducer = (state = initialState, action) => {
 
 
 const rootReducer = combineReducers({
-  strings: stringsReducer,
+  strings:stringsReducer,
   user: userReducer,
   deals: dealsReducer,
 });
