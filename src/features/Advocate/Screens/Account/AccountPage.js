@@ -1,133 +1,119 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Button from "../../../../components/Botton"; 
-import Loader from "../../../../components/Loader"; 
-import { EvilIcons } from '@expo/vector-icons'; 
+import React, { useState, useEffect} from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+//import { useSelector } from 'react-redux';
+import * as SecureStore from "expo-secure-store";
+import { useFocusEffect } from "@react-navigation/native"; 
+const AccountPage = ({ navigation }) => {
+  const [accountDetails, setAccountDetails] = useState( {
+  email: "",
+  fullname: "",
+  phone: "",
+  password: "",
+  registrationNumber: "",
+  expertise: [],
+  bio: "No bio",
+  experience: "",});
 
-const AccountPage = () => {
-  const [userDetails, setUserDetails] = useState({
-    email: "",
-    fullname: "",
-    phone: "",
-    password: "",
-    registrationNumber: "",
-    expertise: [],
-    bio: "No bio",
-    experience: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
 
+  //Get request
   useEffect(() => {
-    // Fetch user details from the server when the component mounts
-    fetchUserDetails();
+    fetchData();
   }, []);
 
-  const fetchUserDetails = async () => {
-    // Simulating fetching user details from the server
-    setLoading(true);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [])
+  );
+  const fetchData = async () => {
     try {
-      // Replace this with your actual API endpoint
-      const response = await fetch("https://your-api-endpoint.com/user-details");
-      const data = await response.json();
-      setUserDetails(data);
-    } catch (error) {
-      Alert.alert("Error", "Failed to fetch user details");
-    }
-    setLoading(false);
-  };
-
-  const handleUpdateDetails = async () => {
-    // Simulating updating user details on the server
-    setLoading(true);
-    try {
-      // Replace this with your actual API endpoint
-      const response = await fetch("https://your-api-endpoint.com/update-details", {
-        method: "PUT",
+      const token = await SecureStore.getItemAsync("authToken");
+      const response = await fetch("http://localhost:3000/user/getProblems", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(userDetails),
       });
       const data = await response.json();
-      Alert.alert("Success", "User details updated successfully");
+
+     // console.log(data);
+      setAccountDetails(data);
     } catch (error) {
-      Alert.alert("Error", "Failed to update user details");
+      console.error("Error fetching data:", error);
     }
-    setLoading(false);
   };
 
-  const handleInputChange = (value, field) => {
-    setUserDetails(prevState => ({
-      ...prevState,
-      [field]: value
-    }));
-  };
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Loader visible={loading} />
-      <TextInput
-        style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
-        value={userDetails.email}
-        onChangeText={text => handleInputChange(text, "email")}
-        placeholder="Email"
-      />
-      <TextInput
-        style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
-        value={userDetails.fullname}
-        onChangeText={text => handleInputChange(text, "fullname")}
-        placeholder="Full Name"
-      />
-      <TextInput
-        style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
-        value={userDetails.phone}
-        onChangeText={text => handleInputChange(text, "phone")}
-        placeholder="Phone"
-      />
-      <TextInput
-        style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
-        value={userDetails.password}
-        onChangeText={text => handleInputChange(text, "password")}
-        placeholder="Password"
-        secureTextEntry
-      />
-      <TextInput
-        style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
-        value={userDetails.registrationNumber}
-        onChangeText={text => handleInputChange(text, "registrationNumber")}
-        placeholder="Registration Number"
-      />
-      <View style={{ flexDirection: "row", flexWrap: "wrap", marginBottom: 10 }}>
-        {userDetails.expertise.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={{ marginRight: 10, marginBottom: 10, backgroundColor: "#f0f0f0", borderRadius: 5 }}
-            onPress={() => handleRemoveExpertise(item)}
-          >
-            <Text style={{ padding: 10 }}>{item}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <TextInput
-        style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
-        value={userDetails.bio}
-        onChangeText={text => handleInputChange(text, "bio")}
-        placeholder="Bio"
-      />
-      <TextInput
-        style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
-        value={userDetails.experience}
-        onChangeText={text => handleInputChange(text, "experience")}
-        placeholder="Experience"
-      />
-      <Button title="Update Details" onPress={handleUpdateDetails} />
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={{ marginTop: 10, color: "blue" }}>Go Back</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Account Details</Text>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate("EditAccountPage")}
+      >
+        <Text style={styles.addButtonText}>Edit Details</Text>
       </TouchableOpacity>
+      <View>
+        <Text>{accountDetails.email}</Text>
+        <Text>{accountDetails.fullname}</Text>
+        <Text>{accountDetails.bio}</Text>
+        <Text>{accountDetails.expertise}</Text>
+        <Text>{accountDetails.experience}</Text>
+        <Text>{accountDetails.registrationNumber}</Text>
+        <Text>{accountDetails.phone}</Text>
+        <Text>{accountDetails.password}</Text>
+      </View>
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 8,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  queryContainer: {
+    margin: 5,
+    backgroundColor: "#fefefe",
+    padding: 20,
+    borderRadius: 10,
+  },
+  queryTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  queryDetails: {
+    fontSize: 16,
+    marginTop: 5,
+  },
+  queryLastDate: {
+    fontSize: 14,
+    fontStyle: "italic",
+    marginTop: 5,
+  },
+  queryStatus: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  addButton: {
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: "flex-end",
+    marginTop: 20,
+  },
+  addButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});
+
 export default AccountPage;
+

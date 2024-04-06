@@ -4,9 +4,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 //redux
-import { addCaseAPI } from '../../../../api/api';
+import { addCaseAPI } from './Modal/Modal';
 import { useDispatch } from 'react-redux'; 
-import { addQuery } from '../../../../Redux/action';
+import { addQuery } from '../../../../../Redux/action';
 
 const AddDeal = ({navigation}) => {
     const dispatch = useDispatch();

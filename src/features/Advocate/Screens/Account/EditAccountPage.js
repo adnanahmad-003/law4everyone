@@ -17,11 +17,9 @@ import Input from "../../../../components/Input";
 import Button from "../../../../components/Botton";
 import COLORS from "../../../../constants/Color";
 import Loader from "../../../../components/Loader";
-import UploadProfile from "../../../../components/UploadProfile";
-import UploadIdentity from "../../../../components/UploadIdentity";
 import { EvilIcons } from "@expo/vector-icons";
 
-const SignupLawyer = () => {
+const EditAccountPage = () => {
   const [expertise, setExpertise] = useState([]);
   const [newExpertise, setNewExpertise] = useState("");
   const predefinedExpertise = [
@@ -149,9 +147,6 @@ const SignupLawyer = () => {
     if (step === 1 && isValid) {
       setStep(2);
     }
-    if (step === 2) {
-      setStep(3);
-    }
   };
   const handleOnchange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
@@ -182,7 +177,6 @@ const SignupLawyer = () => {
 
             {step === 1 && (
               <View style={{ marginTop: 50 }}>
-
                 <Input
                   onChangeText={(text) => handleOnchange(text, "email")}
                   onFocus={() => handleError(null, "email")}
@@ -225,34 +219,6 @@ const SignupLawyer = () => {
               </View>
             )}
             {step === 2 && (
-              <View style={{ marginTop: 50, height: 620 }}>
-                <Text
-                  style={{
-                    fontSize: 28,
-                    textAlign: "left",
-                    fontWeight: "600",
-                    color: "white",
-                  }}
-                >
-                  Upload Your Current Profile Picture
-                </Text>
-                <UploadProfile />
-                <Text
-                  style={{
-                    fontSize: 28,
-                    textAlign: "left",
-                    fontWeight: "600",
-                    color: "white",
-                  }}
-                >
-                  Upload Your Current Profile Picture
-                </Text>
-                <UploadIdentity />
-
-                <Button title="Next" onPress={handleNext} />
-              </View>
-            )}
-            {step === 3 && (
               <View style={{ marginTop: 50 }}>
                 <Input
                   onChangeText={(text) =>
@@ -407,6 +373,6 @@ const SignupLawyer = () => {
   );
 };
 
-export default SignupLawyer;
+export default EditAccountPage;
 
 const styles = StyleSheet.create({});

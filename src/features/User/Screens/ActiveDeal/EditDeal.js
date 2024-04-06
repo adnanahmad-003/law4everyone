@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 //import { useDispatch, useSelector } from 'react-redux';
 //import { updateQuery } from '../../../../Redux/action';
-import { updateCaseAPI } from '../../../../api/api';
+import { updateCaseAPI } from './Modal/Modal';
 const EditDeal = ({ route, navigation }) => {
   const { queryId } = route.params;
   const {title}= route.params;

@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Keyboard, K, SafeAreaView, Platform, TouchableOpacity } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react'
 //import DropDownPicker from 'react-native-dropdown-picker';
-import COLORS from '../../../constants/Color';
+import COLORS from '../../../../constants/Color';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import * as SecureStore from 'expo-secure-store';
 import { useDispatch, useSelector } from 'react-redux';
-import { addString } from '../../../../Redux/action';
-import { addStringAPI } from '../../../../api/api';
+import { addString } from '../../../../../Redux/action';
+import { addStringAPI } from './Modal/Modal';
 import { AntDesign } from '@expo/vector-icons';
 import {
     AndroidAudioEncoder,

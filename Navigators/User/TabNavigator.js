@@ -1,10 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import FindLawyerScreen from '../../src/features/User/FindLawyer/FindLawyerScreen';
-import LawQuery from '../../src/features/User/Query/LawQuery';
-import BlogFeed from '../../src/features/User/Blog/BlogFeed';
-import HomeScreen from '../../src/features/User/HomeScreen';
+import FindLawyerScreen from '../../src/features/User/Screens/FindLawyer/FindLawyerScreen';
+import LawQuery from '../../src/features/User/Screens/Query/LawQuery';
+import BlogFeed from '../../src/features/User/Screens/Blog/BlogFeed';
+import HomeScreen from '../../src/features/User/Screens/HomeScreen';
 import ActiveDealStackScreen from './ActiveDealStackScreen';
 import { MaterialIcons } from '@expo/vector-icons';
 import COLORS from '../../src/constants/Color';

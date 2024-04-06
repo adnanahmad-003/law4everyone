@@ -1,13 +1,13 @@
 import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable,Keyboard, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import Input from '../../../components/Input';
-import Button from '../../../components/Botton';
-import COLORS from '../../../constants/Color';
-import Loader from '../../../components/Loader';
+import Input from '../../../../components/Input';
+import Button from '../../../../components/Botton';
+import COLORS from '../../../../constants/Color';
+import Loader from '../../../../components/Loader';
 //redux user 
 import { useSelector, useDispatch } from 'react-redux';
-import { setUserData } from '../../../../Redux/action';
+import { setUserData } from '../../../../../Redux/action';
 const Signup = () => {
   const userData = useSelector((state) => state.user);
   const dispatch = useDispatch();

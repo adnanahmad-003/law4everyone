@@ -1,8 +1,8 @@
 import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ActiveDealScreen from '../../src/features/User/ActiveDeal/ActiveDealScreen';
-import AddDeal from '../../src/features/User/ActiveDeal/AddDeal';
-import EditDeal from '../../src/features/User/ActiveDeal/EditDeal';
+import AddDeal from '../../src/features/User/Screens/ActiveDeal/AddDeal';
+import EditDeal from '../../src/features/User/Screens/ActiveDeal/EditDeal';
 
 const ActiveDeal = createNativeStackNavigator();
 

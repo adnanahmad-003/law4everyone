@@ -1,5 +1,5 @@
 
-import CharacterListItem from '../../../components/CharacterListItem';
+import CharacterListItem from '../../../../components/CharacterListItem';
 import {
   ActivityIndicator,
   FlatList,
