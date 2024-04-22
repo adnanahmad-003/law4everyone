@@ -3,7 +3,7 @@ import { Platform, Text, View, StyleSheet, Touchable, TouchableOpacity } from 'r
 
 //redux to set location
 import { useDispatch, useSelector } from 'react-redux';
-import { updateLocation } from '../../../../Redux/action';
+import { updateLocation } from '../../../../../Redux/action';
 
 
 import * as Location from 'expo-location';

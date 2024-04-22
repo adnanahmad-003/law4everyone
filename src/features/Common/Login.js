@@ -63,7 +63,7 @@ const Login = () => {
        console.log(jsonData,'login')
        setResponse({message:jsonData.message,isSignedIn:jsonData.isSignedIn})
       if(jsonData.isSignedIn){
-        navigation.navigate('Tabs');
+        navigation.navigate('UserTabs');
         await SecureStore.setItemAsync('authToken',jsonData.authToken);
        const res= await SecureStore.getItemAsync('authToken');
        

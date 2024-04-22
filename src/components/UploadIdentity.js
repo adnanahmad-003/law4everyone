@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-const UploadIdentity = ()=> {
+const UploadIdentity = ({ setImageUri })=> {
   const [image, setImage] = useState(null);
   //const [selected , setSelected]=useState(false);
 
@@ -15,10 +15,11 @@ const UploadIdentity = ()=> {
       quality: 1,
     });
 
-    console.log(result);
+    //console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      setImageUri(result.assets[0].uri);
     }
   };
 

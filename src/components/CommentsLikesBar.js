@@ -1,17 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
-const CommentsLikesBar = ({ comments, likes }) => {
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+const CommentsLikesBar = ({isLiked, comments, likes, onLikePress, onCommentsPress }) => {
+  //console.log(isLiked);
   return (
     <View style={styles.container}>
-      <View style={styles.item}>
+       <TouchableOpacity style={styles.item} onPress={onLikePress}>
+       <AntDesign name="heart" size={24} color={isLiked ? "red" : "#fff"} />
+        <Text style={styles.label}>Like</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.item} >
         <Text style={styles.text}>{comments}</Text>
         <Text style={styles.label}>Comments</Text>
-      </View>
-      <View style={styles.item}>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.item} onPress={onCommentsPress}>
+        <Text style={styles.text}>{comments}</Text>
+        <Text style={styles.label}>  SeeComments</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.item}>
         <Text style={styles.text}>{likes}</Text>
         <Text style={styles.label}>Likes</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -5,6 +5,7 @@ import Input from '../../../../components/Input';
 import Button from '../../../../components/Botton';
 import COLORS from '../../../../constants/Color';
 import Loader from '../../../../components/Loader';
+import UploadProfile from "../../../../components/UploadProfile";
 //redux user 
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserData } from '../../../../../Redux/action';
@@ -13,6 +14,8 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
+  //profile image
+  const [profileImageUri1, setProfileImageUri1] = useState('');
   const [inputs, setInputs] = React.useState({
     email: 'trendymodernvibes@gmail.com',
     name: 'Adnan',
@@ -61,11 +64,14 @@ const Signup = () => {
      }
    
   };
+    // Function to handle setting profile image URI for the first image
+    const handleSetProfileImageUri1 = (uri) => {
+      setProfileImageUri1(uri);
+    };
 
   const register = async () => {
     setLoading(true);
     setTimeout(async () => { 
-      //console.log(inputs)
       try {
         dispatch(
           setUserData({
@@ -76,38 +82,45 @@ const Signup = () => {
           })
         );
         setLoading(false);
-        const apiUrl = 'http://localhost:3000/user/signup';
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            
+    const formData = new FormData();
+    formData.append('email', inputs.email);
+    formData.append('name', inputs.name);
+    formData.append('phone', inputs.phone);
+    formData.append('password', inputs.password);
+    formData.append('files', {
+      uri: uri1,
+      type: 'image/jpg', 
+      name: 'image1.jpg' 
+    });
+
+    const apiUrl = 'http://localhost:3000/user/signup';
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data', 
+      },
+      body: formData,
+    });
+
+    const jsonData = await response.json();
+    setResponse(jsonData);
+    console.log(jsonData);
+
+    if (jsonData.isSignedUp) {
+      navigation.navigate('EmailVerification', { email: inputs.email ,nextNavigate: 'login' })
+    } else {
+      Alert.alert(
+        'Login Please',
+        jsonData.message,
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('Login'),
           },
-          
-          body:JSON.stringify(inputs),
-        });
-        
-        const jsonData = await response.json();
-        setResponse(jsonData);
-         console.log(jsonData)
-        if(jsonData.isSignedUp){
-          navigation.navigate('EmailVerification', { email: inputs.email ,nextNavigate: 'login' })
-        }
-        else{
-          Alert.alert(
-            'Login Please',
-            jsonData.message,
-            [
-              {
-                text: 'OK',
-                onPress: () => navigation.navigate('Login'),
-              },
-            ],
-            { cancelable: false }
-          );
-        }
-       
-        
+        ],
+        { cancelable: false }
+      );
+    }   
       }
        catch (error) {
         console.log('Error', 'Something went wrong',{error});
@@ -128,7 +141,7 @@ const Signup = () => {
       <ScrollView style={{flex:1}}>
         <Loader visible={loading}/>
     <ImageBackground
-        source={require('../../../../assets/Images/Login.jpg')}
+        source={require('../../../../../assets/Images/Login.jpg')}
         style={{height:900}}
       >
      
@@ -136,6 +149,7 @@ const Signup = () => {
       <Text style={{fontSize:31,textAlign:"center",fontWeight:"600",color:"white"}}>SignUp</Text>
       
       <View style={{marginTop:50}}> 
+      <UploadProfile setImageUri={handleSetProfileImageUri1} />
       <Input
             onChangeText={text => handleOnchange(text, 'email')}
             onFocus={() => handleError(null, 'email')}

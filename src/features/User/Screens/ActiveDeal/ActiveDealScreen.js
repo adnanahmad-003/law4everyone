@@ -42,12 +42,12 @@ const ActiveDealScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Active Deals</Text>
+      <Text style={styles.title}>Active Cases</Text>
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => navigation.navigate("AddDeal")}
       >
-        <Text style={styles.addButtonText}>Add Deal</Text>
+        <Text style={styles.addButtonText}>Add Cases</Text>
       </TouchableOpacity>
       {queries.problems &&
         queries.problems.map((problem) => (

@@ -11,6 +11,7 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
+import { AdvocateSignup } from "./Modal";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Input from "../../../../components/Input";
@@ -22,6 +23,16 @@ import UploadIdentity from "../../../../components/UploadIdentity";
 import { EvilIcons } from "@expo/vector-icons";
 
 const SignupLawyer = () => {
+
+
+  //image 
+  const [profileImageUri1, setProfileImageUri1] = useState('');
+  const [profileImageUri2, setProfileImageUri2] = useState('');
+
+
+  
+  
+
   const [expertise, setExpertise] = useState([]);
   const [newExpertise, setNewExpertise] = useState("");
   const predefinedExpertise = [
@@ -56,22 +67,30 @@ const SignupLawyer = () => {
     setExpertise(updatedExpertise);
   };
   const [columns, setColumns] = useState(2);
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [responseData, setResponseData] = useState(null);
   const navigation = useNavigation();
   const [inputs, setInputs] = React.useState({
-    email: "",
-    fullname: "",
-    phone: "",
-    password: "",
-    registrationNumber: "",
+    username: "Adnan",
+    email: "Adnan@gmail.com",
+    fullname: "Adnan",
+    phone: "1245678999",
+    password: "1263889",
+    registrationNumber: "Xe356y3",
     expertise: [],
     bio: "No bio",
-    experience: "",
+    experience: "2",
+    dateOfBirth:Date.now(),
+    address:"some",
+    nameOfUniversity:"rghhj",
+    yearOfGraduation:"123",
+
   });
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
 
+
+  
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
@@ -93,29 +112,35 @@ const SignupLawyer = () => {
       register();
     }
   };
+    // Function to handle setting profile image URI for the first image
+  const handleSetProfileImageUri1 = (uri) => {
+    setProfileImageUri1(uri);
+  };
 
+  // Function to handle setting profile image URI for the second image
+  const handleSetProfileImageUri2 = (uri) => {
+    setProfileImageUri2(uri);
+  };
+
+
+  //upload details
   const register = async () => {
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        setLoading(false);
-        inputs.expertise = expertise;
-        const apiUrl = "https://your-api-endpoint.com/api";
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(inputs),
-        });
-        const jsonData = await response.json();
-        setResponseData(jsonData);
-        console.log(jsonData);
-        navigation.navigate("Login");
-      } catch (error) {
-        Alert.alert("Error", "Something went wrong");
-      }
-    }, 2000);
+    setLoading(true);
+    try {
+      const response = await AdvocateSignup(
+        inputs,
+        profileImageUri1,
+        profileImageUri2
+      );
+      setLoading(false);
+
+      console.log(response);
+      navigation.navigate("Login");
+    } catch (error) {
+      setLoading(false);
+      Alert.alert("Error", "Something went wrong");
+    }
   };
 
   const handleNext = () => {
@@ -159,7 +184,8 @@ const SignupLawyer = () => {
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
-
+  //console.log(profileImageUri1, '1');
+ // console.log(profileImageUri2, '2');
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
@@ -236,7 +262,8 @@ const SignupLawyer = () => {
                 >
                   Upload Your Current Profile Picture
                 </Text>
-                <UploadProfile />
+                <UploadProfile setImageUri={handleSetProfileImageUri1} />
+
                 <Text
                   style={{
                     fontSize: 28,
@@ -247,7 +274,7 @@ const SignupLawyer = () => {
                 >
                   Upload Your Current Profile Picture
                 </Text>
-                <UploadIdentity />
+                <UploadIdentity setImageUri={handleSetProfileImageUri2}/>
 
                 <Button title="Next" onPress={handleNext} />
               </View>

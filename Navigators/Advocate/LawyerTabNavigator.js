@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../../src/features/User/HomeScreen';
+import HomeScreen from '../../src/features/User/Screens/Home/HomeScreen';
 import BlogStackScreen from './BlogStackScreen'
 import AccountStackScreen from './AccountStackScreen';
-import LawQuery from '../../src/features/User/Query/LawQuery';
+import LawQuery from '../../src/features/User/Screens/Query/LawQuery';
 import { MaterialIcons } from '@expo/vector-icons';
 import COLORS from '../../src/constants/Color';
 
