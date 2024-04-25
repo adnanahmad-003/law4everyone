@@ -1,19 +1,19 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-//import { useSelector } from 'react-redux';
 import * as SecureStore from "expo-secure-store";
-import { useFocusEffect } from "@react-navigation/native"; 
-const AccountPage = ({ navigation }) => {
-  const [accountDetails, setAccountDetails] = useState( {
-  email: "",
-  fullname: "",
-  phone: "",
-  password: "",
-  registrationNumber: "",
-  expertise: [],
-  bio: "No bio",
-  experience: "",});
+import { useFocusEffect } from "@react-navigation/native";
 
+const AccountPage = ({ navigation }) => {
+  const [accountDetails, setAccountDetails] = useState({
+    email: "",
+    fullname: "",
+    phone: "",
+    password: "",
+    registrationNumber: "",
+    expertise: [],
+    bio: "No bio",
+    experience: "",
+  });
 
   //Get request
   useEffect(() => {
@@ -25,6 +25,7 @@ const AccountPage = ({ navigation }) => {
       fetchData();
     }, [])
   );
+
   const fetchData = async () => {
     try {
       const token = await SecureStore.getItemAsync("authToken");
@@ -36,33 +37,45 @@ const AccountPage = ({ navigation }) => {
         },
       });
       const data = await response.json();
-
-     // console.log(data);
       setAccountDetails(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Account Details</Text>
       <TouchableOpacity
-        style={styles.addButton}
+        style={styles.editButton}
         onPress={() => navigation.navigate("EditAccountPage")}
       >
-        <Text style={styles.addButtonText}>Edit Details</Text>
+        <Text style={styles.editButtonText}>Edit Details</Text>
       </TouchableOpacity>
-      <View>
-        <Text>{accountDetails.email}</Text>
-        <Text>{accountDetails.fullname}</Text>
-        <Text>{accountDetails.bio}</Text>
-        <Text>{accountDetails.expertise}</Text>
-        <Text>{accountDetails.experience}</Text>
-        <Text>{accountDetails.registrationNumber}</Text>
-        <Text>{accountDetails.phone}</Text>
-        <Text>{accountDetails.password}</Text>
+      <View style={styles.detailsContainer}>
+        <Text style={styles.label}>Email:</Text>
+        <Text style={styles.text}>{accountDetails.email}</Text>
+
+        <Text style={styles.label}>Full Name:</Text>
+        <Text style={styles.text}>{accountDetails.fullname}</Text>
+
+        <Text style={styles.label}>Bio:</Text>
+        <Text style={styles.text}>{accountDetails.bio}</Text>
+
+        <Text style={styles.label}>Expertise:</Text>
+        <Text style={styles.text}>{accountDetails.expertise.join(", ")}</Text>
+
+        <Text style={styles.label}>Experience:</Text>
+        <Text style={styles.text}>{accountDetails.experience}</Text>
+
+        <Text style={styles.label}>Registration Number:</Text>
+        <Text style={styles.text}>{accountDetails.registrationNumber}</Text>
+
+        <Text style={styles.label}>Phone:</Text>
+        <Text style={styles.text}>{accountDetails.phone}</Text>
+
+        <Text style={styles.label}>Password:</Text>
+        <Text style={styles.text}>{accountDetails.password}</Text>
       </View>
     </View>
   );
@@ -71,49 +84,41 @@ const AccountPage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
+    padding: 20,
+    backgroundColor: "#f9f9f9",
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    textAlign: "center",
+    marginTop:40,
   },
-  queryContainer: {
-    margin: 5,
-    backgroundColor: "#fefefe",
-    padding: 20,
-    borderRadius: 10,
-  },
-  queryTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  queryDetails: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  queryLastDate: {
-    fontSize: 14,
-    fontStyle: "italic",
-    marginTop: 5,
-  },
-  queryStatus: {
-    fontSize: 14,
-    marginTop: 5,
-  },
-  addButton: {
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
+  editButton: {
+    backgroundColor: "#3E3232",
+    padding: 12,
+    borderRadius: 8,
     alignSelf: "flex-end",
     marginTop: 20,
   },
-  addButtonText: {
-    color: "white",
+  editButtonText: {
+    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  detailsContainer: {
+    marginTop: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 15,
   },
 });
 
 export default AccountPage;
-

@@ -13,5 +13,4 @@ const ActiveDealStackScreen = () => (
     <ActiveDeal.Screen name="EditDeal" component={EditDeal} options={{ headerShown: false }} />
   </ActiveDeal.Navigator>
 );
-
 export default ActiveDealStackScreen;

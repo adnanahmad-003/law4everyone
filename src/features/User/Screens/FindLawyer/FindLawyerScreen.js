@@ -42,21 +42,20 @@ const FindLawyerScreen = () => {
     { label: 'Puducherry', value: 'Puducherry' }
   ]);
   return (
-    <View>
-     
-     <View>
-                    <DropDownPicker
-                        open={open}
-                        value={value}
-                        items={items}
-                        setOpen={setOpen}
-                        setValue={setValue}
-                        setItems={setItems}
-                        placeholder="Select your state"
-                        style={{ width: "60%" }}
-                        dropDownContainerStyle={{ width: '60%', }}
-                    />
-                </View>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor: '#A87C7C' }}>
+      <View>
+        <DropDownPicker
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          placeholder="Select your state"
+          style={{ width: "60%" }}
+          dropDownContainerStyle={{ width: '60%' }}
+        />
+      </View>
     </View>
   )
 }

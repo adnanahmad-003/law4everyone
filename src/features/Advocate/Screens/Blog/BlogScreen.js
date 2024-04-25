@@ -63,7 +63,10 @@ const BlogScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       ))}
-      <TouchableOpacity onPress={() => navigation.navigate('AddBlog')}><Text>Add Blog</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddBlog')}>
+        <Text style={styles.addButtonText}>Add Blog</Text>
+      </TouchableOpacity>
+
     </ScrollView>
       
     </View>
@@ -73,9 +76,26 @@ const BlogScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     padding: 20,
+    
+  
+    
   },
+  addButton: {
+    
+    backgroundColor: '#3E3232',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  addButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },  
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -94,8 +114,9 @@ const styles = StyleSheet.create({
   tags: {
     fontSize: 14,
     fontStyle: 'italic',
-    color: '#666',
+    color: '#3E3232',
   },
+
 });
 
 

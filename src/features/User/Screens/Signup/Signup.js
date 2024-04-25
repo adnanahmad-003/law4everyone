@@ -193,7 +193,7 @@ const Signup = () => {
       <Button title="Signup" onPress={validate} />
           
      </View>
-     <View style={{flexDirection:"row",justifyContent:"center",marginTop:12}}><Text style={{fontSize:15,color:"white"}}>Already have a account </Text><Pressable onPress={()=>navigation.goBack()}><Text style={{color:"#7727C8"}}>Login</Text></Pressable></View>
+     <View style={{flexDirection:"row",justifyContent:"center",marginTop:12}}><Text style={{fontSize:15,color:"white"}}>Already have a account: </Text><Pressable onPress={()=>navigation.goBack()}><Text style={{color:"#A87C7C"}}>Login</Text></Pressable></View>
      </ImageBackground>
      </ScrollView>
     </SafeAreaView>

@@ -102,68 +102,85 @@ const AddBlog = ({navigation}) => {
   };
   return (
     <ScrollView style={styles.container}>
-    <View style={styles.incontainer}>
-      
-      <TextInput
-        style={styles.input}
-        value={title}
-        placeholder='Give Title to your post'
-        onChangeText={text => setTitle(text)}
-      />
-      
-      <TouchableOpacity onPress={pickImage} style={{width:"98%" ,height:300,backgroundColor:COLORS.white,alignItems: 'center', justifyContent: 'center',alignSelf:"center",borderRadius:10}}>
-      {image && <Image source={{ uri: image }} style={{  width: "100%", 
-        height: "100%", 
-        resizeMode: 'contain' }} />}
-        {!image&&<Text>Upload your post</Text>}
-      </TouchableOpacity>
-      
-    <Text style={styles.label}>Content:</Text>
-      <TextInput
-        style={styles.input}
-        multiline
-        value={content}
-        onChangeText={text => setContent(text)}
-      />
-      <Text style={styles.label}>Tags:</Text>
-      <TextInput
-        style={styles.input}
-        value={tags}
-        onChangeText={text => setTags(text)}
-      />
-      <Button title="Add Blog" onPress={handleAddBlog}/>
-      <TouchableOpacity onPress={() => navigation.navigate('BlogScreen')}><Text>go back</Text></TouchableOpacity>
-    </View>
+      <View style={styles.incontainer}>
+        <TextInput
+          style={styles.input}
+          value={title}
+          placeholder='Give Title to your post'
+          onChangeText={text => setTitle(text)}
+        />
+        <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
+          {image && <Image source={{ uri: image }} style={styles.image} />}
+          {!image && <Text>Upload your post</Text>}
+        </TouchableOpacity>
+        <Text style={styles.label}>Content:</Text>
+        <TextInput
+          style={styles.input}
+          multiline
+          value={content}
+          onChangeText={text => setContent(text)}
+        />
+        <Text style={styles.label}>Tags:</Text>
+        <TextInput
+          style={styles.input}
+          value={tags}
+          onChangeText={text => setTags(text)}
+        />
+        <Button
+          title="Add Blog"
+          onPress={handleAddBlog}
+          color="#3E3232" // Change button color to #3E3232
+        />
+        <TouchableOpacity onPress={() => navigation.navigate('BlogScreen')}><Text>Go Back</Text></TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:COLORS.white
+    backgroundColor: COLORS.white,
   },
-  incontainer:{
-    marginTop:40,
-    padding:20,
-    backgroundColor:COLORS.purple,
-    borderRadius:10,
-    margin:5
+  incontainer: {
+    marginTop: 60,
+    padding: 20,
+    backgroundColor: COLORS.purple,
+    borderRadius: 10,
+    margin: 5,
   },
   label: {
     fontSize: 18,
     marginBottom: 5,
+    color: '#3E3232', // Set label text color to white
   },
   input: {
     fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    borderWidth: 2, // Increase border width to 2
+    borderColor: '#3E3232',
     borderRadius: 5,
     padding: 10,
-    marginBottom:10
-    
+    marginBottom: 10,
+    backgroundColor: COLORS.white, // Set input background color to white
+  },
+  imageContainer: {
+    width: '100%',
+    height: 300,
+    backgroundColor: COLORS.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 10,
+    marginBottom: 10,
+    borderWidth: 2, // Increase border width to 2
+    borderColor: '#3E3232',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
 });
+
 
 export default AddBlog
 

@@ -255,32 +255,24 @@ const SignupLawyer = () => {
                 <Text
                   style={{
                     fontSize: 28,
-                    textAlign: "left",
+                    textAlign: "center",
                     fontWeight: "600",
-                    color: "white",
+                    color: "#A87C7C",
+                    padding:25,
                   }}
                 >
                   Upload Your Current Profile Picture
                 </Text>
-                <UploadProfile setImageUri={handleSetProfileImageUri1} />
+                <UploadProfile setImageUri={handleSetProfileImageUri2} />
 
-                <Text
-                  style={{
-                    fontSize: 28,
-                    textAlign: "left",
-                    fontWeight: "600",
-                    color: "white",
-                  }}
-                >
-                  Upload Your Current Profile Picture
-                </Text>
-                <UploadIdentity setImageUri={handleSetProfileImageUri2}/>
+
+              
 
                 <Button title="Next" onPress={handleNext} />
               </View>
             )}
             {step === 3 && (
-              <View style={{ marginTop: 50 }}>
+              <View style={{ marginTop: 30 }}>
                 <Input
                   onChangeText={(text) =>
                     handleOnchange(text, "registrationNumber")
@@ -316,7 +308,7 @@ const SignupLawyer = () => {
                         marginBottom: 10,
                       }}
                     >
-                      Select your Expertise
+                      Select your Expertise:
                     </Text>
                   </View>
                   <View
@@ -333,12 +325,13 @@ const SignupLawyer = () => {
                       >
                         <Text
                           style={{
-                            padding: 10,
+                            padding: 7,
                             borderWidth: 1,
-                            borderColor: "gray",
+                            borderColor: "white",
                             marginBottom: 5,
-                            borderRadius: 5,
-                            color: "#fff",
+                            borderRadius: 10,
+                            color: "#A87C7C",
+                            margin: 5,
                           }}
                         >
                           {item}
@@ -351,10 +344,12 @@ const SignupLawyer = () => {
                       style={{
                         color: "#fff",
                         height: 40,
-                        borderColor: "#fff",
+                        borderColor: "#A87C7C",
                         borderWidth: 2,
+                        borderRadius: 10,
                         flex: 2,
                         paddingHorizontal: 10,
+                        
                       }}
                       placeholder="Add more expertise"
                       placeholderTextColor={"#fff"}
@@ -363,10 +358,10 @@ const SignupLawyer = () => {
                       onSubmitEditing={handleAddExpertise}
                     />
                     <TouchableOpacity
-                      style={{ backgroundColor: COLORS.purple }}
+                      style={{ backgroundColor: COLORS.purple ,borderRadius: 10,margin: 5}}
                       onPress={handleAddExpertise}
                     >
-                      <Text style={{ color: "#fff", padding: 10, flex: 1 }}>
+                      <Text style={{ color: "#000", padding: 10, flex: 1}}>
                         Add
                       </Text>
                     </TouchableOpacity>
@@ -381,6 +376,8 @@ const SignupLawyer = () => {
                         borderColor: "#fff",
                         borderWidth: 2,
                         marginVertical: 5,
+                        borderRadius: 10,
+                        
                       }}
                       numColumns={columns}
                       renderItem={({ item }) => (
@@ -388,18 +385,20 @@ const SignupLawyer = () => {
                           onPress={() => handleRemoveExpertise(item)}
                           style={{
                             marginHorizontal: 6,
-                            backgroundColor: "#f0f0f0",
+                            backgroundColor: "#A87C7C",
                             marginRight: 5,
                             marginBottom: 5,
                             borderRadius: 10,
                             flexDirection: "row",
+                            flexWrap: "wrap",
                             alignItems: "center",
                           }}
                         >
-                          <EvilIcons name="close-o" size={24} color="black" />
+                          <EvilIcons name="close-o" size={24} color="white" />
                           <Text
                             style={{
                               padding: 5,
+                              color:'#fff',
                             }}
                           >
                             {item}
@@ -425,7 +424,7 @@ const SignupLawyer = () => {
               Already have a account{" "}
             </Text>
             <Pressable onPress={() => navigation.goBack()}>
-              <Text style={{ color: "#7727C8" }}>Login</Text>
+              <Text style={{ color: "#A87C7C" }}>Login</Text>
             </Pressable>
           </View>
         </ImageBackground>

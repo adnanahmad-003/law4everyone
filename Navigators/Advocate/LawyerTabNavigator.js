@@ -32,7 +32,7 @@ const LawyerTabNavigator = () => {
         tabBarHideOnKeyboard: true,
         tabBarItemStyle: { padding: 3 }
       })}
-      initialRouteName='Home'
+      initialRouteName='Query'
     >
       <Tab.Screen name="Query" component={LawQuery} options={{ headerShown: false }} />
       <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />

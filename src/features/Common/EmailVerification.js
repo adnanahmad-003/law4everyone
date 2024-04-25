@@ -50,4 +50,4 @@ const EmailVerification = () => {
 
 export default EmailVerification
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

@@ -185,9 +185,9 @@ const LawQuery = () => {
 
         < SafeAreaView style={{ marginTop: 10, flex: 1 }}>
 
-            <View style={{ backgroundColor: COLORS.purple, padding: 8, marginHorizontal: 6, borderRadius: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <View style={{ height:55,backgroundColor: COLORS.purple, padding: 8, marginHorizontal: 6, borderRadius: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" ,margin:50}}>
 
-                <View><Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", marginRight: 10 }}>Ask your question</Text></View>
+                <View><Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", marginRight:10 ,alignItems: "center" }}>Ask your question</Text></View>
             </View>
             <View style={{}}>
 
@@ -206,11 +206,11 @@ const LawQuery = () => {
                     {sound && (
                         <View style={{ flexDirection: "row", marginLeft: "45%" }}>
                             <TouchableOpacity onPress={playRecording} style={{ backgroundColor: COLORS.purple, margin: 3, padding: 8, borderRadius: 13, width: "40%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <AntDesign name="play" size={24} color={play ? '#fff' : '#ff0000'} />
+                                <AntDesign name="play" size={24} color={play ? '#fff' : '#3E3232'} />
                                 <Text style={{ color: COLORS.white }}>Play</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={stopPlayback} style={{ backgroundColor: COLORS.purple, margin: 3, padding: 8, borderRadius: 13, width: "40%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <AntDesign name="pausecircle" size={24} color={play ? '#ff0000' : '#fff'} />
+                                <AntDesign name="pausecircle" size={24} color={play ? '#3E3232' : '#fff'} />
                                 <Text style={{ color: COLORS.white }}>Stop</Text>
                             </TouchableOpacity>
                         </View>
@@ -249,7 +249,7 @@ const LawQuery = () => {
                 </TouchableOpacity>
 
 
-                <View style={{ width: "79%", marginHorizontal: 5 }}>
+                <View style={{ width: "76%", marginHorizontal: 5 }}>
 
 
                     <TextInput
@@ -265,7 +265,7 @@ const LawQuery = () => {
 
 
                 </View>
-                <TouchableOpacity style={{ width: 30, height: 30 }}><Button title="+" onPress={handleAddString} /></TouchableOpacity>
+                <TouchableOpacity style={{ width: 35, height: 35,borderRadius: 40}}><Button title="+" onPress={handleAddString} color="#A87C7C"  /></TouchableOpacity>
             </View>
 
         </SafeAreaView>
