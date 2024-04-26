@@ -3,8 +3,17 @@ import { View, Text, TextInput, Button, StyleSheet,Image, TouchableOpacity, Scro
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import COLORS from './../../../../constants/Color';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const AddBlog = ({navigation}) => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: 'Appellate Jurisdiction', value: 'Appellate Jurisdiction' },
+    { label: 'Original Jurisdiction', value: 'Original Jurisdiction' },
+    { label: 'Exclusive Jurisdiction', value: 'Exclusive Jurisdiction' },
+    { label: 'Concurrent Jurisdiction', value: 'Concurrent Jurisdiction' },
+  ]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
@@ -27,7 +36,10 @@ const AddBlog = ({navigation}) => {
       await AsyncStorage.setItem('blogImage', result.assets[0].uri);  
     }
   };
-
+  // Appellate Jurisdiction
+  // Original Jurisdiction
+  // Exclusive Jurisdiction
+  // Concurrent Jurisdiction
   //api
   /*const handleAddBlog = async () => {
     try {
@@ -131,6 +143,19 @@ const AddBlog = ({navigation}) => {
         value={tags}
         onChangeText={text => setTags(text)}
       />
+       <View style={{flex:1,marginBottom:160}}>
+        <DropDownPicker
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          placeholder="Select Jurisdiction"
+          style={{ width:'95%'}}
+          dropDownContainerStyle={{ width:'95%',height:'240%'}}
+        />
+        </View>
       <Button title="Add Blog" onPress={handleAddBlog}/>
       <TouchableOpacity onPress={() => navigation.navigate('BlogScreen')}><Text>go back</Text></TouchableOpacity>
     </View>

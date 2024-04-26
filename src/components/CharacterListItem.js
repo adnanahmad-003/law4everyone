@@ -39,9 +39,9 @@ const CharacterListItem = ({ character, isLiked, setIsLiked }) => {
   const handleLikePress = async () => {
     setIsLiked(!isLiked);
     if (myLike) {
-      setLikes(likes - 1);
+      setLikes(Math.max(likes - 1, 0));
     } else {
-      setLikes(likes + 1);
+      setLikes(Math.max(likes + 1, 0));
     }
     setMyLike(!myLike);
     await fetchLikes(blogId);
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'darkslategrey',
-    alignSelf: 'Left',
+    alignSelf:'flex-start',
     marginVertical: 10,
   },
   image: {

@@ -21,6 +21,9 @@ const Signup = () => {
     name: 'Adnan',
     phone: 123,
     password: '123456',
+    state:'',
+    city:'',
+    pincode:'',
   });
   const[responseData,setResponse]=useState({
     message:'',
@@ -45,6 +48,19 @@ const Signup = () => {
       handleError('Please input fullname', 'name');
      isValid = false;
     }
+    if (!inputs.state) {
+      handleError('Please input fullname', 'name');
+     isValid = false;
+    }
+    if (!inputs.city) {
+      handleError('Please input fullname', 'name');
+     isValid = false;
+    }
+    if (!inputs.pincode) {
+      handleError('Please input fullname', 'name');
+     isValid = false;
+    }
+    
 
     if (!inputs.phone) {
       handleError('Please input phone number', 'phone');
@@ -79,6 +95,9 @@ const Signup = () => {
             location: [],
             email: inputs.email,
             phone: inputs.phone,
+            state:inputs.state,
+            city:inputs.city,
+            pincode:inputs.pincode,
           })
         );
         setLoading(false);
@@ -87,6 +106,9 @@ const Signup = () => {
     formData.append('name', inputs.name);
     formData.append('phone', inputs.phone);
     formData.append('password', inputs.password);
+    formData.append('state', inputs.state);
+    formData.append('city', inputs.city);
+    formData.append('pincode', inputs.pincode);
     formData.append('files', {
       uri: uri1,
       type: 'image/jpg', 
@@ -137,68 +159,123 @@ const Signup = () => {
   
   
   return (
-    <SafeAreaView style={{flex:1}} >
-      <ScrollView style={{flex:1}}>
-        <Loader visible={loading}/>
-    <ImageBackground
-        source={require('../../../../../assets/Images/Login.jpg')}
-        style={{height:900}}
-      >
-     
-     <View style={{marginTop:80,marginHorizontal:20}}>
-      <Text style={{fontSize:31,textAlign:"center",fontWeight:"600",color:"white"}}>SignUp</Text>
-      
-      <View style={{marginTop:50}}> 
-      <UploadProfile setImageUri={handleSetProfileImageUri1} />
-      <Input
-            onChangeText={text => handleOnchange(text, 'email')}
-            onFocus={() => handleError(null, 'email')}
-            iconName="email-outline"
-            label="Email"
-            placeholder="Enter your email address"
-            error={errors.email}
-          />
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }}>
+        <Loader visible={loading} />
+        <ImageBackground
+          source={require("../../../../../assets/Images/Login.jpg")}
+          style={{ height: 1200 }}
+        >
+          <View style={{ marginTop: 80, marginHorizontal: 20 }}>
+            <Text
+              style={{
+                fontSize: 31,
+                textAlign: "center",
+                fontWeight: "600",
+                color: "white",
+              }}
+            >
+              SignUp
+            </Text>
 
-          <Input
-            onChangeText={text => handleOnchange(text, 'name')}
-            onFocus={() => handleError(null, 'name')}
-            iconName="account-outline"
-            label="Full Name"
-            placeholder="Enter your full name"
-            error={errors.fullname}
-          />
+            <View style={{ marginTop: 50 }}>
+              <UploadProfile setImageUri={handleSetProfileImageUri1} />
+              <Input
+                onChangeText={(text) => handleOnchange(text, "email")}
+                onFocus={() => handleError(null, "email")}
+                iconName="email-outline"
+                label="Email"
+                placeholder="Enter your email address"
+                error={errors.email}
+              />
 
-          <Input
-            keyboardType="numeric"
-            onChangeText={text => handleOnchange(text, 'phone')}
-            onFocus={() => handleError(null, 'phone')}
-            iconName="phone-outline"
-            label="Phone Number"
-            placeholder="Enter your phone no"
-            error={errors.phone}
-          />
-          
-          <Input
-            onChangeText={text => handleOnchange(text, 'password')}
-            onFocus={() => handleError(null, 'password')}
-            iconName="lock-outline"
-            label="Password"
-            placeholder="Enter your password"
-            error={errors.password}
-            password
-          />
-    
-    
-      </View>
-      <Button title="Signup" onPress={validate} />
-          
-     </View>
-     <View style={{flexDirection:"row",justifyContent:"center",marginTop:12}}><Text style={{fontSize:15,color:"white"}}>Already have a account </Text><Pressable onPress={()=>navigation.goBack()}><Text style={{color:"#7727C8"}}>Login</Text></Pressable></View>
-     </ImageBackground>
-     </ScrollView>
+              <Input
+                onChangeText={(text) => handleOnchange(text, "name")}
+                onFocus={() => handleError(null, "name")}
+                iconName="account-outline"
+                label="Full Name"
+                placeholder="Enter your full name"
+                error={errors.fullname}
+              />
+
+              <Input
+                keyboardType="numeric"
+                onChangeText={(text) => handleOnchange(text, "phone")}
+                onFocus={() => handleError(null, "phone")}
+                iconName="phone-outline"
+                label="Phone Number"
+                placeholder="Enter your phone no"
+                error={errors.phone}
+              />
+
+              <Input
+                onChangeText={(text) => handleOnchange(text, "password")}
+                onFocus={() => handleError(null, "password")}
+                iconName="lock-outline"
+                label="Password"
+                placeholder="Enter your password"
+                error={errors.password}
+                password
+              />
+              <View>
+                <Text
+                  style={{
+                    
+                      marginVertical: 5,
+                      fontSize: 16,
+                      color: COLORS.purple,
+                    
+                  }}
+                >
+                  Address
+                </Text>
+                <Input
+                  onChangeText={(text) => handleOnchange(text, "state")}
+                  onFocus={() => handleError(null, "state")}
+                  iconName="map-search-outline"
+                  label="State"
+                  placeholder="Enter your state"
+                  error={errors.fullname}
+                />
+                <Input
+                  onChangeText={(text) => handleOnchange(text, "city")}
+                  onFocus={() => handleError(null, "city")}
+                  iconName="map-marker-radius"
+                  label="City"
+                  placeholder="Enter your City"
+                  error={errors.fullname}
+                />
+                <Input
+                  keyboardType="numeric"
+                  onChangeText={(text) => handleOnchange(text, "pincode")}
+                  onFocus={() => handleError(null, "pincode")}
+                  iconName="mailbox"
+                  label="Pincode"
+                  placeholder="Enter your Pincode"
+                  error={errors.phone}
+                />
+              </View>
+            </View>
+            <Button title="Signup" onPress={validate} />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 12,
+            }}
+          >
+            <Text style={{ fontSize: 15, color: "white" }}>
+              Already have a account{" "}
+            </Text>
+            <Pressable onPress={() => navigation.goBack()}>
+              <Text style={{ color: "#7727C8" }}>Login</Text>
+            </Pressable>
+          </View>
+        </ImageBackground>
+      </ScrollView>
     </SafeAreaView>
-  
-  )
+  );
 }
 
 export default Signup

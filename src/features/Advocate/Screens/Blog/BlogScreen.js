@@ -25,6 +25,7 @@ const BlogScreen = ({ navigation }) => {
       console.error('Error retrieving blogs:', error);
     }
   };
+  
   const deleteBlog = async (index) => {
     try {
       const updatedBlogs = blogs.filter((blog, i) => i !== index);

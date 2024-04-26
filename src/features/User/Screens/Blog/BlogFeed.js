@@ -2,10 +2,12 @@ import CharacterListItem from "../../../../components/CharacterListItem";
 import * as SecureStore from "expo-secure-store";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Text,
   View,
   useWindowDimensions,
+  
 } from "react-native";
 import React, {
   useState,
@@ -17,7 +19,7 @@ import React, {
 
 const BlogFeed = () => {
   const [skip, setSkip] = useState(0);
-  const limit = 1;
+  const limit = 4;
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState([]);
 
@@ -49,22 +51,32 @@ const BlogFeed = () => {
       );
       const data = await response.json();
       console.log(data.message);
+     
+      if (data.blogs) {
+        console.log(skip,'skip');
+        setItems(existingItems => [...existingItems, ...data.blogs]);
+          setSkip(skip + limit);
 
-      if (data.blogs && data.blogs.length > 0) {
-        const uniqueBlogs = data.blogs.filter(
-          (newBlog) =>
-            !items.some((existingBlog) => existingBlog.id === newBlog.id)
+      } 
+      else {
+        Alert.alert(
+          'All Caught Up',
+          'You are up to date! No new Feed',
+          [
+            {
+              text: 'OK',
+              
+            }
+          ],
+          { cancelable: false }
         );
-
-        setItems((existingItems) => [...existingItems, ...uniqueBlogs]);
-        setSkip(skip + limit);
-        setIsLiked(data.blogs.isLiked);
       }
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
     }
+    
   };
 
   /*const onRefresh = () => {
@@ -110,3 +122,5 @@ const BlogFeed = () => {
 };
 
 export default BlogFeed;
+
+// onEndReached={() => fetchPage()}

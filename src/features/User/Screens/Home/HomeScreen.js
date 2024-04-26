@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Platform, Text, View, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
 
+import * as SecureStore from "expo-secure-store";
+import { useFocusEffect } from "@react-navigation/native"; 
 //redux to set location
 import { useDispatch, useSelector } from 'react-redux';
 import { updateLocation } from '../../../../../Redux/action';
@@ -55,6 +57,45 @@ const HomeScreen = () => {
     })();
   }, []);
 
+
+
+  const [accountDetails, setAccountDetails] = useState( {
+    email: "",
+    fullname: "",
+    phone: "",
+   });
+  
+  
+    //Get request
+  /*  useEffect(() => {
+      fetchData();
+    }, []);
+  
+    useFocusEffect(
+      React.useCallback(() => {
+        fetchData();
+      }, [])
+    );
+    const fetchData = async () => {
+      try {
+        const token = await SecureStore.getItemAsync("authToken");
+        const response = await fetch("http://localhost:3000/user/getProblems", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+  
+       // console.log(data);
+        setAccountDetails(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };*/
+  
+
  /* useEffect(() => {
     if (location) {
       (async () => {
@@ -77,21 +118,52 @@ const HomeScreen = () => {
   }*/
 
   return (
-<View>
-<TouchableOpacity onPress={handleLocationUpdate}>
-          <Text>Enable location</Text>
+    <View style={{flex:1}}>
+      <Text style={styles.title}>Account Details</Text>
+      <TouchableOpacity onPress={handleLocationUpdate}>
+        <Text >Enable location</Text>
+      </TouchableOpacity>
+
+      <View style={styles.container}>
+        
+        <TouchableOpacity style={styles.addButton}>
+          <Text>Edit account details</Text>
         </TouchableOpacity>
-</View>
-  )
+
+        <View>
+          <Text>{accountDetails.email}</Text>
+          <Text>{accountDetails.fullname}</Text>
+          <Text>{accountDetails.phone}</Text>
+        </View>
+      </View>
+    </View>
+  );
 }
 
-export default HomeScreen
+
 
 const styles = StyleSheet.create({
-  container:{
-    backgroundColor:"black"
+  container: {
+    padding: 8,
   },
-  paragraph:{
-   color:"white"
-  }
-})
+  title: {
+    color:'#7727C8',
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  addButton: {
+    backgroundColor:'blue',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: "flex-end",
+    marginTop: 20,
+  },
+  addButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});
+
+export default HomeScreen;
