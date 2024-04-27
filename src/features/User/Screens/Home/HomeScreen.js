@@ -9,6 +9,7 @@ import { updateLocation } from '../../../../../Redux/action';
 
 
 import * as Location from 'expo-location';
+import COLORS from '../../../../constants/Color';
 const HomeScreen = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -118,16 +119,16 @@ const HomeScreen = () => {
   }*/
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex:1,alignContent:'center'}}>
       <Text style={styles.title}>Account Details</Text>
-      <TouchableOpacity onPress={handleLocationUpdate}>
+      <TouchableOpacity  style={styles.enabletext} onPress={handleLocationUpdate}>
         <Text >Enable location</Text>
       </TouchableOpacity>
 
       <View style={styles.container}>
         
         <TouchableOpacity style={styles.addButton}>
-          <Text>Edit account details</Text>
+          <Text style={styles.addButtonText}>Edit account details</Text>
         </TouchableOpacity>
 
         <View>
@@ -146,23 +147,32 @@ const styles = StyleSheet.create({
   container: {
     padding: 8,
   },
-  title: {
-    color:'#7727C8',
-    fontSize: 20,
+ 
+  title:{
+    color:COLORS.brown1,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
+    alignSelf:'center',
+    marginTop:80
+  },
+  enabletext:{
+    alignSelf:'center',
   },
   addButton: {
-    backgroundColor:'blue',
+    backgroundColor:COLORS.brown4,
     padding: 10,
     borderRadius: 5,
-    alignSelf: "flex-end",
+    alignSelf: "center",
     marginTop: 20,
+    height:45,
+    textAlignVertical:'center',
   },
   addButtonText: {
-    color: "white",
+    color: '#fff',
     fontSize: 16,
     fontWeight: "bold",
+    
   },
 });
 

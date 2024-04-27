@@ -3,6 +3,7 @@ import React,{useState,useEffect} from 'react'
 
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import COLORS from '../../../../constants/Color';
 
 
 
@@ -25,7 +26,6 @@ const BlogScreen = ({ navigation }) => {
       console.error('Error retrieving blogs:', error);
     }
   };
-  
   const deleteBlog = async (index) => {
     try {
       const updatedBlogs = blogs.filter((blog, i) => i !== index);
@@ -64,7 +64,10 @@ const BlogScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       ))}
-      <TouchableOpacity onPress={() => navigation.navigate('AddBlog')}><Text>Add Blog</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddBlog')}>
+        <Text style={styles.addButtonText}>Add Blog</Text>
+      </TouchableOpacity>
+
     </ScrollView>
       
     </View>
@@ -74,9 +77,26 @@ const BlogScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     padding: 20,
+    
+  
+    
   },
+  addButton: {
+    
+    backgroundColor:COLORS.brown4,
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  addButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },  
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -95,8 +115,9 @@ const styles = StyleSheet.create({
   tags: {
     fontSize: 14,
     fontStyle: 'italic',
-    color: '#666',
+    color: '#3E3232',
   },
+
 });
 
 
