@@ -8,13 +8,15 @@ import EmailVerification from '../../src/features/Common/EmailVerification';
 import TabNavigator from '../User/TabNavigator';
 import LawyerTabNavigator from '../Advocate/LawyerTabNavigator';
 import CommentScreen from "../../src/components/CommentsScreen";
+import AdvocateLogin from "../../src/features/Common/AdvocateLogin";
 const Stack = createNativeStackNavigator();
 
 const AuthStackNavigator = () => {
   return (
     <NavigationContainer>
-    <Stack.Navigator initialRouteName='UserTabs'>
+    <Stack.Navigator initialRouteName='Login'>
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="AdvocateLogin" component={AdvocateLogin} options={{ headerShown: false }} />
       <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
       <Stack.Screen name="SignupLawyer" component={SignupLawyer} options={{ headerShown: false }} />
       <Stack.Screen name="EmailVerification" component={EmailVerification} options={{ headerShown: false }} />

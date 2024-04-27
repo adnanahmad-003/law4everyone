@@ -177,23 +177,27 @@ const FindLawyerScreen = () => {
   ]);
   const handleFilter = async () => {
     try {
+      //const advocatesIds = advocatesList.map(advocate => advocate.id);
+      const advocatesIds = advocatesList.map(advocate => ({ advocateId: advocate.advocateId }));
+
       const token = await SecureStore.getItemAsync("authToken");
+     // console.log(advocatesIds);
       const response = await fetch(
-        `http://localhost:3000/user/searchByLocation`,
+        `http://localhost:3000/user/filterByAreasOfExpertise`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ areaOfExpertise: expertise }),
+          body: JSON.stringify({ areasOfExpertise: expertise ,advocates:advocatesIds}),
         }
       );
 
       const data = await response.json();
 
-      console.log(data);
-      setAdvocatesList(data.nearbyAdvocates);
+      //console.log(data,'filtered');
+      setAdvocatesList(data.filteredAdvocates);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -219,7 +223,7 @@ const FindLawyerScreen = () => {
       const data = await response.json();
 
       console.log(data);
-      setAdvocatesList(data.nearByAdvocates);
+      setAdvocatesList(data.nearbyAdvocates);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -439,6 +443,16 @@ const FindLawyerScreen = () => {
           >
             <Text style={styles.submitButtonText}>Search</Text>
           </TouchableOpacity>
+          <FilterModal
+            isOpen={isFilterModalOpen}
+            onClose={closeFilterModal}
+            predefinedExpertise={predefinedExpertise}
+            handleSelectPredefinedExpertise={handleSelectPredefinedExpertise}
+            expertise={expertise}
+            handleRemoveExpertise={handleRemoveExpertise}
+            columns={columns}
+            handleFilter={handleFilter}
+          />
         </View>
       )}
       

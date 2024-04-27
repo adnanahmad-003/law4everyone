@@ -1,22 +1,129 @@
 import React, { useState,useEffect} from 'react';
-import { View, Text, TextInput, Button, StyleSheet,Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet,Image, TouchableOpacity, ScrollView,Modal,FlatList } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import COLORS from './../../../../constants/Color';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { EvilIcons } from "@expo/vector-icons";
+import * as SecureStore from "expo-secure-store";
+import { Entypo } from "@expo/vector-icons";
+const FilterModal = ({
+  isOpen,
+  onClose,
+  predefinedExpertise,
+  handleSelectPredefinedExpertise,
+  expertise,
+  handleRemoveExpertise,
+  columns,
+  handleFilter,
+}) => {
+  return (
+    <Modal
+      visible={isOpen}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Entypo name="circle-with-cross" size={24} color="black" />
+          </TouchableOpacity>
+          <View>
+            <Text style={styles.modalTitle}>Filter based on Expertise</Text>
+          </View>
+          <View style={styles.predefinedExpertiseContainer}>
+            {predefinedExpertise.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleSelectPredefinedExpertise(item)}
+              >
+                <Text style={styles.predefinedExpertiseText}>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <FlatList
+            key={columns}
+            data={expertise}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.expertiseList}
+            numColumns={columns}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => handleRemoveExpertise(item)}
+                style={styles.expertiseItem}
+              >
+                <EvilIcons name="close-o" size={24} color="black" />
+                <Text style={styles.expertiseItemText}>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+
+          <TouchableOpacity style={styles.submitButton} onPress={handleFilter}>
+            <Text style={styles.submitButtonText}>Apply Filter</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+};
 
 const AddBlog = ({navigation}) => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: 'Appellate Jurisdiction', value: 'Appellate Jurisdiction' },
-    { label: 'Original Jurisdiction', value: 'Original Jurisdiction' },
-    { label: 'Exclusive Jurisdiction', value: 'Exclusive Jurisdiction' },
-    { label: 'Concurrent Jurisdiction', value: 'Concurrent Jurisdiction' },
-  ]);
+
+  //expertise searching for
+  const [expertise, setExpertise] = useState([]);
+  
+  const predefinedExpertise = [
+    "Civil Law",
+    "Criminal Law",
+    "Corporate Law",
+    "Tax Law",
+    "Labor and Employment Law",
+    "Intellectual Property Law",
+    "Constitutional Law",
+    "Environmental Law",
+    "International Law",
+    "Family Law",
+    "Real Estate Law",
+    "Banking and Finance Law",
+    "Personal Injury Law",
+    "Health Law",
+    "Education Law",
+    "Immigration Law",
+    "Cyber Law",
+    "Entertainment Law",
+    "Insurance Law",
+    "Trusts and Estates Law"
+  ];
+  
+  const [columns, setColumns] = useState(2);
+
+  const handleSelectPredefinedExpertise = (item) => {
+    setExpertise((prevExpertise)=>[...prevExpertise, item]);
+    //console.log(expertise);
+  };
+
+  const handleRemoveExpertise = (itemToRemove) => {
+    const updatedExpertise = expertise.filter((item) => item !== itemToRemove);
+    setExpertise(updatedExpertise);
+  };
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  const openFilterModal = () => {
+    setIsFilterModalOpen(true);
+  };
+
+  const closeFilterModal = () => {
+    setIsFilterModalOpen(false);
+  };
+  const handleFilter =()=>{
+    console.log('Tags selected');
+  }
+
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
+  //const [tags, setTags] = useState('');
   const [image, setImage] = useState(null);
 
 
@@ -36,29 +143,26 @@ const AddBlog = ({navigation}) => {
       await AsyncStorage.setItem('blogImage', result.assets[0].uri);  
     }
   };
-  // Appellate Jurisdiction
-  // Original Jurisdiction
-  // Exclusive Jurisdiction
-  // Concurrent Jurisdiction
-  //api
-  /*const handleAddBlog = async () => {
+
+  const handleAddBlog = async () => {
     try {
+      const token = await SecureStore.getItemAsync("authToken");
       const formData = new FormData();
       formData.append('title', title);
-      formData.append('content', content);
-      formData.append('tags', tags);
+      formData.append('description', content);
+      formData.append('tags', JSON.stringify(expertise));
       formData.append('image', {
         uri: image,
-        type: 'image/jpeg', // Change it according to your image type
-        name: 'image.jpg',
+        type: 'image/jpg', 
+        name: 'image1.jpg' 
       });
   
-      const response = await fetch('YOUR_API_ENDPOINT', {
+      const response = await fetch('http://localhost:3000/advocate/postBlog', {
         method: 'POST',
         body: formData,
         headers: {
           'Content-Type': 'multipart/form-data',
-          // Add any additional headers if needed
+          Authorization: `Bearer ${token}`,
         },
       });
   
@@ -67,24 +171,20 @@ const AddBlog = ({navigation}) => {
       }
   
       const data = await response.json();
-      console.log('Response data:', data);
-      // Handle success response from the server
+      console.log(expertise);
+      
   
     } catch (error) {
       console.error('Error:', error);
-      // Handle error
+      
     }
-    console.log('Blog Title:', title);
-    console.log('Blog Content:', content);
-    console.log('Tags:', tags);
-    console.log('Image:', image);
     setTitle('');
     setContent('');
-    setTags('');
+    setExpertise([]);
     setImage(null);
-  };*/
+  };
 
-  const handleAddBlog = async () => {
+  /*const handleAddBlog = async () => {
     try {
       const blog = {
         title: title,
@@ -106,12 +206,12 @@ const AddBlog = ({navigation}) => {
       console.log('Blog has been stored:', blog);
       setTitle('');
       setContent('');
-      setTags('');
+      setExpertise([]);
       setImage(null);
     } catch (error) {
       console.error('Error storing blog:', error);
     }
-  };
+  };*/
   return (
     <ScrollView style={styles.container}>
     <View style={styles.incontainer}>
@@ -138,26 +238,24 @@ const AddBlog = ({navigation}) => {
         onChangeText={text => setContent(text)}
       />
       <Text style={styles.label}>Tags:</Text>
-      <TextInput
-        style={styles.input}
-        value={tags}
-        onChangeText={text => setTags(text)}
-      />
-       <View style={{flex:1,marginBottom:160}}>
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          placeholder="Select Jurisdiction"
-          style={{ width:'95%'}}
-          dropDownContainerStyle={{ width:'95%',height:'240%'}}
-        />
-        </View>
+      <TouchableOpacity
+            style={styles.filterButton}
+            onPress={openFilterModal}
+          >
+            <Text style={styles.filterButtonText}>Select Tags</Text>
+          </TouchableOpacity>
       <Button title="Add Blog" onPress={handleAddBlog}/>
       <TouchableOpacity onPress={() => navigation.navigate('BlogScreen')}><Text>go back</Text></TouchableOpacity>
+      <FilterModal
+            isOpen={isFilterModalOpen}
+            onClose={closeFilterModal}
+            predefinedExpertise={predefinedExpertise}
+            handleSelectPredefinedExpertise={handleSelectPredefinedExpertise}
+            expertise={expertise}
+            handleRemoveExpertise={handleRemoveExpertise}
+            columns={columns}
+            handleFilter={handleFilter}
+          />
     </View>
     </ScrollView>
   );
@@ -187,6 +285,61 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom:10
     
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  predefinedExpertiseContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 10,
+  },
+  predefinedExpertiseText: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    marginBottom: 5,
+    borderRadius: 5,
+    color: "#000",
+  },
+  expertiseList: {
+    paddingVertical: 10,
+    borderColor: "#000",
+    borderWidth: 2,
+    marginVertical: 5,
+  },
+  expertiseItem: {
+    marginHorizontal: 6,
+    backgroundColor: "#f0f0f0",
+    marginRight: 5,
+    marginBottom: 5,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  expertiseItemText: {
+    padding: 5,
+  },
+  closeButton: {
+    marginLeft: "90%",
+  },
+  closeButtonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
 

@@ -59,20 +59,25 @@ const Input = ({label,
 }
 
 const style = StyleSheet.create({
-    label: {
-      marginVertical: 5,
-      fontSize: 16,
-      color: COLORS.purple,
-    },
-    inputContainer: {
-      height: 55,
-      backgroundColor: COLORS.purple,
-      flexDirection: 'row',
-      paddingHorizontal: 15,
-      borderWidth: 0.5,
-      borderRadius:10,
-    },
-  });
+  label: {
+    marginVertical: 5,
+    fontSize: 17,
+    color: COLORS.brown4,
+  },
+  inputContainer: {
+    height: 55,
+    backgroundColor: COLORS.brown1,
+    flexDirection: "row",
+    paddingHorizontal: 15,
+    borderWidth: 0.5,
+    borderRadius: 10,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 7 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+});
 
 export default Input
 

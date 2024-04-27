@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable ,Keyboard,Alert ,Image} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,Image, Pressable ,Keyboard,Alert} from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/Input';
@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setUserData } from '../../../Redux/action';
 import COLORS from '../../constants/Color';
 
-const Login = () => {
+const AdvocateLogin = () => {
   const userData = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [responseData,setResponse]= useState({
@@ -17,13 +17,11 @@ const Login = () => {
     isSignedIn:false
   });
   const navigation = useNavigation();
-  const [isUser, setUser] = useState(true);
- 
-  
-
+  const [isUser, setUser] = useState(false);
   const [inputs, setInputs] = React.useState({
     email: '',
-   password: ''});
+   password: ''
+});
   const [errors, setErrors] = React.useState({});
   //const [loading, setLoading] = React.useState(false);
   
@@ -46,7 +44,7 @@ const Login = () => {
   const login= async () => { 
     try {
       //setLoading(false);
-      const apiUrl = 'http://localhost:3000/user/signin';
+      const apiUrl = 'http://localhost:3000/advocate/signin';
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -54,7 +52,7 @@ const Login = () => {
           
         },
         
-        body:JSON.stringify({user:inputs}),
+        body:JSON.stringify({advocate:inputs}),
       });
       
       const jsonData = await response.json();
@@ -62,7 +60,7 @@ const Login = () => {
        console.log(jsonData,'login')
        setResponse({message:jsonData.message,isSignedIn:jsonData.isSignedIn})
       if(jsonData.isSignedIn){
-        navigation.navigate('UserTabs');
+        navigation.navigate('LawyerTabs');
         await SecureStore.setItemAsync('authToken',jsonData.authToken);
        const res= await SecureStore.getItemAsync('authToken');
        
@@ -82,7 +80,7 @@ const Login = () => {
       );
      }
      else if(!(jsonData.isSignedIn) && (jsonData.message!='Wrong password')){
-      navigation.navigate('EmailVerification', { email: inputs.email , nextNavigate: 'UserTabs'})
+      navigation.navigate('EmailVerification', { email: inputs.email , nextNavigate: 'LawyerTabs'})
      }
     
      
@@ -100,19 +98,20 @@ const Login = () => {
   const handleError = (error, input) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
-  const handleNavigateToAdvocate = ()=>{
-    navigation.navigate('AdvocateLogin');
+  const handleNavigateToUser = ()=>{
+    navigation.navigate('Login');
   };
   
   
   return (
-    <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
-      <View style={{ marginTop: 10 }}>
-        <Image
+    <SafeAreaView style={{backgroundColor:"white",flex:1}} >
+    
+     <View style={{marginTop:20}}>
+     <Image
           source={require("../../../assets/Images/Warner.png")}
           style={{ height: 200, resizeMode: "contain", alignSelf: "center" }}
         />
-        <Text
+       <Text
           style={{
             fontSize: 31,
             textAlign: "center",
@@ -130,7 +129,27 @@ const Login = () => {
             marginTop: 40,
           }}
         >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleNavigateToUser}>
+            <View
+              style={{
+                paddingHorizontal: 14,
+                paddingVertical: 6,
+                borderRadius: 6,
+                
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 22,
+                  color: COLORS.brown2,
+                  fontWeight: "500",
+                }}
+              >
+                USER
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity >
             <View
               style={{
                 shadowColor: COLORS.brown1,
@@ -151,37 +170,18 @@ const Login = () => {
                   fontWeight: "500",
                 }}
               >
-                USER
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleNavigateToAdvocate}>
-            <View
-              style={{
-                paddingHorizontal: 14,
-                paddingVertical: 6,
-                borderRadius: 6,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 22,
-                  color: COLORS.brown2,
-                  fontWeight: "500",
-                }}
-              >
                 ADVOCATE
               </Text>
             </View>
           </TouchableOpacity>
         </View>
-        {responseData.isSignedIn ? null : (
-          <Text style={{ color: "white" }}>{responseData.authToken}</Text>
-        )}
-        <View style={{ marginTop: 50, marginHorizontal: 20 }}>
+      {responseData.isSignedIn?null:<Text style={{color:"white"}}>{responseData.authToken}</Text>}
+      <View style={{marginTop:50,marginHorizontal:20}}>
+      
+      
           <Input
-            onChangeText={(text) => handleOnchange(text, "email")}
-            onFocus={() => handleError(null, "email")}
+            onChangeText={text => handleOnchange(text, 'email')}
+            onFocus={() => handleError(null, 'email')}
             iconName="email-outline"
             label="Email"
             placeholder="Enter your email address"
@@ -189,8 +189,8 @@ const Login = () => {
             error={errors.email}
           />
           <Input
-            onChangeText={(text) => handleOnchange(text, "password")}
-            onFocus={() => handleError(null, "password")}
+            onChangeText={text => handleOnchange(text, 'password')}
+            onFocus={() => handleError(null, 'password')}
             iconName="lock-outline"
             label="Password"
             placeholder="Enter your password"
@@ -198,10 +198,14 @@ const Login = () => {
             error={errors.password}
             password
           />
+        
           <Button title="Log In" onPress={validate} />
-        </View>
+          
+      
       </View>
-      <View
+      
+     </View>
+     <View
         style={{
           flexDirection: "row",
           justifyContent: "center",
@@ -211,13 +215,13 @@ const Login = () => {
         <Text style={{ fontSize: 15, color: COLORS.brown2 }}>
           Create new account{" "}
         </Text>
-        <Pressable onPress={() => navigation.navigate("Signup")}>
+        <Pressable onPress={() => navigation.navigate("SignupLawyer")}>
           <Text style={{ color: COLORS.brown4 }}>Click Here</Text>
         </Pressable>
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
-export default Login
+export default AdvocateLogin
 

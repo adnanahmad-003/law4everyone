@@ -180,6 +180,7 @@ const Signup = () => {
 
             <View style={{ marginTop: 50 }}>
               <UploadProfile setImageUri={handleSetProfileImageUri1} />
+              
               <Input
                 onChangeText={(text) => handleOnchange(text, "email")}
                 onFocus={() => handleError(null, "email")}
