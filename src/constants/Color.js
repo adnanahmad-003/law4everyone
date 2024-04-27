@@ -1,6 +1,6 @@
   const COLORS ={
     white:'#fff',
-    purple:'#7727C8',
+    purple:'#7f5539',
     black:'#000',
     red:'#ff0000',
     brown1:'#7f5539',

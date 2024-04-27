@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 //import { useSelector } from 'react-redux';
 import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native"; 
+import COLORS from "../../../../constants/Color";
 const ActiveDealScreen = ({ navigation }) => {
   const [queries, setQueries] = useState([]);
   //const queries = useSelector(state => state.deals.queries);
@@ -72,11 +73,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
+    backgroundColor: "#fff",
+    justifyContent: 'center', // Center items vertically
+    alignItems: 'center', // Center items horizontally
   },
   title: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
+    color:'#503C3C',
+    
   },
   queryContainer: {
     margin: 5,
@@ -102,18 +108,17 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   addButton: {
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
-    alignSelf: "flex-end",
+    backgroundColor: COLORS.brown4,
+    padding: 13,
+    borderRadius: 10,
+    alignSelf: "center",
     marginTop: 20,
   },
   addButtonText: {
-    color: "white",
-    fontSize: 16,
+    color: "#fff",
+    fontSize: 20,
     fontWeight: "bold",
   },
 });
 
 export default ActiveDealScreen;
-

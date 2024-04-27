@@ -301,12 +301,14 @@ const FindLawyerScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#7727C8" }}>
+    <View style={{ flex: 1, backgroundColor:'#fff' }}>
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           marginHorizontal: 10,
+          marginTop: 70,
+                
         }}
       >
         <TouchableOpacity
@@ -333,15 +335,16 @@ const FindLawyerScreen = () => {
       {searchMode === "normal" && (
         <View>
           <TouchableOpacity
-            style={{ backgroundColor: "#fff", margin: 5, padding: 5 }}
+            style={{ backgroundColor: COLORS.brown1, padding: 5,height:50,margin:20,borderRadius:10,justifyContent: 'center' }}
             onPress={handleSearchByNearby}
           >
-            <Text>Search nearby Advocate</Text>
+            <Text style={{ textAlign: 'left', color: 'white',margin:10,height:25 }}>Search nearby Advocate</Text>
           </TouchableOpacity>
           <View
             style={{
               marginBottom: 140,
               margin: 10,
+              
               flexDirection: "row",
               justifyContent: "space-between",
             }}
@@ -355,18 +358,19 @@ const FindLawyerScreen = () => {
                 setValue={setValue}
                 setItems={setItems}
                 placeholder="Select your state"
-                style={{ width: "95%" }}
+                style={{ width: "95%" ,backgroundColor:COLORS.brown5,margin:15}}
                 dropDownContainerStyle={{ width: "95%", height: "240%" }}
               />
             </View>
             <View style={{ flex: 1, backgroundColor: "#fff" }}>
               <TextInput
-                style={styles.input}
+                style={{ ...styles.input, width: "80%", backgroundColor: COLORS.brown5, margin: 20, height: 60,borderColor:COLORS.brown1,borderRadius:10 }}
                 placeholder="Enter City"
                 value={city}
                 onChangeText={setCity}
               />
             </View>
+
           </View>
 
           <TouchableOpacity
@@ -423,16 +427,22 @@ const FindLawyerScreen = () => {
 
           <TextInput
             style={{
-              backgroundColor: "#fff",
-              margin: 10,
-              padding: 5,
+              backgroundColor: COLORS.brown1,
+              margin: 20,
+              padding: 10,
               borderRadius: 4,
+              borderRadius:10,
+              height:50,
+              color: 'white', // Text input color
+              
+            
             }}
             placeholder={
               advancedSearchOption === "userName"
                 ? "Enter UserName"
                 : "Enter Name"
             }
+            placeholderTextColor="#fff" 
             value={searchText}
             onChangeText={setSearchText}
           />
@@ -477,6 +487,7 @@ const FindLawyerScreen = () => {
                   marginVertical: 5,
                   padding: 10,
                   borderRadius: 5,
+                
                 }}
               >
                 <Text style={{ color: "#000" }}>
@@ -502,38 +513,57 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10,
     marginRight: 19,
+
+  },
+  
+  filterButton:{
+    backgroundColor:'white',
+    alignSelf:'center',
+    marginTop:20,
+    borderColor:COLORS.brown1,
+  },
+  filterButtonText:{
+    color:COLORS.brown1
   },
   submitButton: {
-    backgroundColor: "blue",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: COLORS.brown4,
+    alignSelf:'center',
+    padding:12,
     borderRadius: 5,
-    marginRight: 19,
+    marginRight: "40%",
     marginLeft: "40%",
     width: 100,
   },
   submitButtonText: {
     color: "white",
     fontWeight: "bold",
+    alignSelf:'center'
   },
-  activeButton: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    width: "48%",
-    alignItems: "center",
-  },
-  inactiveButton: {
-    backgroundColor: "transparent",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    width: "48%",
-    alignItems: "center",
-  },
+
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginTop: 20,
+    },
+    activeButton: {
+      backgroundColor: COLORS.brown2,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 10,
+    },
+    inactiveButton: {
+      backgroundColor: COLORS.brown2,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 10,
+    },
+    buttonText: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      color:'#fff'
+    },
+  
+  
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -550,29 +580,32 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
     marginBottom: 10,
+    marginLeft:10,
+    color:COLORS.brown1,
   },
   predefinedExpertiseContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     marginBottom: 10,
+    
   },
   predefinedExpertiseText: {
     padding: 10,
     borderWidth: 1,
-    borderColor: "gray",
-    marginBottom: 5,
-    borderRadius: 5,
-    color: "#000",
+    borderColor: COLORS.brown4,
+    margin: 3,
+    borderRadius: 10,
+    color: COLORS.brown1,
   },
   expertiseList: {
     paddingVertical: 10,
-    borderColor: "#000",
+    borderColor: COLORS.brown1,
     borderWidth: 2,
     marginVertical: 5,
   },
   expertiseItem: {
     marginHorizontal: 6,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: COLORS.brown3,
     marginRight: 5,
     marginBottom: 5,
     borderRadius: 10,
@@ -586,7 +619,7 @@ const styles = StyleSheet.create({
     marginLeft: "90%",
   },
   closeButtonText: {
-    color: "white",
+    color: COLORS.brown1,
     fontWeight: "bold",
   },
 });

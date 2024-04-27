@@ -27,14 +27,14 @@ const TabNavigator = () => {
           const iconName = tabBarIconMap[route.name];
           return <MaterialIcons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: COLORS.purple,
+        tabBarActiveTintColor: COLORS.brown1,
         tabBarInactiveTintColor: '#ccc',
         tabBarInactiveBackgroundColor: "#f2f2f2",
         tabBarActiveBackgroundColor: "#e6e6e6",
         tabBarHideOnKeyboard: true,
         tabBarItemStyle: { padding: 3 }
       })}
-      initialRouteName='Home'
+      initialRouteName='Connect'
     >
       <Tab.Screen name="FindLawyer" component={FindLawyerScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Query" component={LawQuery} options={{ headerShown: false }} />
