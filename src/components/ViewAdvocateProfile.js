@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from "react";
 import { View, Text, StyleSheet, TouchableOpacity,Image } from "react-native";
 //import { useSelector } from 'react-redux';
+import {BASE_URL} from './../constants/Url';
 import COLORS from "../constants/Color";
 import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native"; 
@@ -25,7 +26,7 @@ const ViewAdvocateProfile = () => {
     try {
       const token = await SecureStore.getItemAsync("authToken");
       //console.log(userId,'UserId');
-      const response = await fetch("http://localhost:3000/user/viewAdvocateProfile", {
+      const response = await fetch(`${BASE_URL}/user/viewAdvocateProfile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

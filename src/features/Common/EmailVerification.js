@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation ,useRoute} from '@react-navigation/native';
+import {BASE_URL} from './../../constants/Url';
 const EmailVerification = () => {
     const navigation = useNavigation();
     const route = useRoute();
@@ -10,7 +11,7 @@ const EmailVerification = () => {
     const checkVerification= async () => { 
         try {
           //setLoading(false);
-          const apiUrl = 'http://localhost:3000/user/isUserVerified';
+          const apiUrl = `${BASE_URL}/user/isUserVerified`;
           const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {

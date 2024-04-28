@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CommentsProfileBar from './CommentsProfileBar';
-
+import {BASE_URL} from './../constants/Url';
 import * as SecureStore from 'expo-secure-store';
 
 const CommentScreen = ({ route }) => {
@@ -19,7 +19,7 @@ const CommentScreen = ({ route }) => {
   const fetchComments = async (blogId, comment) => {
     try {
       const token = await SecureStore.getItemAsync('authToken');
-      const response = await fetch(`http://localhost:3000/user/commentOnBlog`, {
+      const response = await fetch(`${BASE_URL}/user/commentOnBlog`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -61,23 +61,32 @@ const CommentScreen = ({ route }) => {
   const handleGoBack = () => {
     navigation.goBack();
   };
-
+  const formatTimestamp = (timestamp) => {
+    return new Date(timestamp).toLocaleString();
+  };
+  const image = `data:image/png;base64,${comments.image}`;
+  //console.log(comments);
   return (
     <View style={styles.container}>
+    <View style={styles.header}>
       <Button title="Go Back" onPress={handleGoBack} />
       <Text style={styles.heading}>Previous Comments</Text>
-      <FlatList
-        data={comments}
-        renderItem={({ item }) => (
-          <View style={styles.commentBox}>
-            <CommentsProfileBar profileImage={userImage} profileName={'Adnan'} />
-            <Text style={styles.comment}>{item.comment}</Text>
-            <Text style={styles.timestamp}>Timestamp: {item.timeStamp}</Text>
+    </View>
+    <FlatList
+      data={comments}
+      renderItem={({ item }) => (
+        <View style={styles.commentContainer}>
+          <CommentsProfileBar profileName={'Adnan'} />
+          <View style={styles.commentContent}>
+            <Text style={styles.commentText}>{item.comment}</Text>
+            <Text style={styles.timestamp}>Timestamp: {formatTimestamp(item.timeStamp)}</Text>
             <Text style={styles.userType}>User Type: {item.userType}</Text>
           </View>
-        )}
-        keyExtractor={(item) => item._id}
-      />
+        </View>
+      )}
+      keyExtractor={(item) => item._id}
+    />
+    <View style={styles.inputContainer}>
       <TextInput
         style={styles.input}
         placeholder="Add a comment..."
@@ -86,38 +95,58 @@ const CommentScreen = ({ route }) => {
       />
       <Button title="Add Comment" onPress={addComment} />
     </View>
+  </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginLeft: 10,
   },
-  comment: {
-    margin: 10,
+  commentContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  commentContent: {
+    marginLeft: 10,
+  },
+  commentText: {
     fontSize: 16,
-    padding: 3,
-    color: '#fff',
+    color: '#000',
   },
-  commentBox: {
-    margin: 10,
-    padding: 3,
-    borderRadius: 4,
-    backgroundColor: '#7727C8',
+  timestamp: {
+    fontSize: 12,
+    color: '#777',
+  },
+  userType: {
+    fontSize: 12,
+    color: '#777',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
+    flex: 1,
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginBottom: 10,
+    marginRight: 10,
   },
 });
 

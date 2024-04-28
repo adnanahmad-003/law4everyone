@@ -10,12 +10,14 @@ import {
   ScrollView,
   ImageBackground
 } from "react-native";
+import Loader from "../../../../components/Loader";
 import React, { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import COLORS from "../../../../constants/Color";
 import { EvilIcons } from "@expo/vector-icons";
 import * as SecureStore from "expo-secure-store";
 import { Entypo } from "@expo/vector-icons";
+import {BASE_URL} from './../../../../constants/Url';
 const FilterModal = ({
   isOpen,
   onClose,
@@ -77,6 +79,7 @@ const FilterModal = ({
   );
 };
 const FindLawyerScreen = () => {
+  const{isLoading,setIsLoading}=useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchMode, setSearchMode] = useState("normal");
   const [advancedSearchOption, setAdvancedSearchOption] = useState("userName");
@@ -111,9 +114,10 @@ const FindLawyerScreen = () => {
 
   const searchNeabyAdvicate = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/nearbyAdvocates`,
+        `${BASE_URL}/user/nearbyAdvocates`,
         {
           method: "GET",
           headers: {
@@ -123,7 +127,7 @@ const FindLawyerScreen = () => {
         }
       );
       const data = await response.json();
-
+      setIsLoading(false);
       console.log(data);
       setAdvocatesList(data.nearbyAdvocates);
       console.log(advocatesList);
@@ -180,13 +184,14 @@ const FindLawyerScreen = () => {
   ]);
   const handleFilter = async () => {
     try {
+      setIsLoading(true);
       //const advocatesIds = advocatesList.map(advocate => advocate.id);
       const advocatesIds = advocatesList.map(advocate => ({ advocateId: advocate.advocateId }));
 
       const token = await SecureStore.getItemAsync("authToken");
      // console.log(advocatesIds);
       const response = await fetch(
-        `http://localhost:3000/user/filterByAreasOfExpertise`,
+        `${BASE_URL}/user/filterByAreasOfExpertise`,
         {
           method: "POST",
           headers: {
@@ -198,7 +203,7 @@ const FindLawyerScreen = () => {
       );
 
       const data = await response.json();
-
+      setIsLoading(false);
       //console.log(data,'filtered');
       setAdvocatesList(data.filteredAdvocates);
     } catch (error) {
@@ -210,9 +215,10 @@ const FindLawyerScreen = () => {
 
   const searchCityState = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/searchByLocation`,
+        `${BASE_URL}/user/searchByLocation`,
         {
           method: "POST",
           headers: {
@@ -224,7 +230,7 @@ const FindLawyerScreen = () => {
       );
 
       const data = await response.json();
-
+      setIsLoading(false);
       console.log(data);
       setAdvocatesList(data.nearbyAdvocates);
     } catch (error) {
@@ -239,9 +245,10 @@ const FindLawyerScreen = () => {
 
   const searchByUserName = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/searchAdvocateByUserName`,
+        `${BASE_URL}/user/searchAdvocateByUserName`,
         {
           method: "POST",
           headers: {
@@ -253,7 +260,7 @@ const FindLawyerScreen = () => {
       );
 
       const data = await response.json();
-
+      setIsLoading(false);
       console.log(data);
       setAdvocatesList(data.advocate);
     } catch (error) {
@@ -263,9 +270,10 @@ const FindLawyerScreen = () => {
   //personalDetails.userName , name ,profileImage
   const searchByName = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/searchAdvocateByName`,
+        `${BASE_URL}/user/searchAdvocateByName`,
         {
           method: "POST",
           headers: {
@@ -277,7 +285,7 @@ const FindLawyerScreen = () => {
       );
 
       const data = await response.json();
-
+      setIsLoading(false);
       console.log(data);
       setAdvocatesList(data.advocate);
     } catch (error) {
@@ -477,7 +485,7 @@ const FindLawyerScreen = () => {
           />
         </View>
       )}
-      
+        
         <View>
           <TouchableOpacity
             style={styles.filterButton}
@@ -485,6 +493,7 @@ const FindLawyerScreen = () => {
           >
             <Text style={styles.filterButtonText}>Filter</Text>
           </TouchableOpacity>
+          <Loader visible={isLoading} />
           <FlatList
             data={advocatesList}
             keyExtractor={(item, index) => index.toString()}
@@ -492,7 +501,7 @@ const FindLawyerScreen = () => {
               <TouchableOpacity
                 onPress={() => {
                   //navigate to AdvocatePage
-                  console.log(navigate);
+                 // console.log(navigate);
                 }}
                 style={{
                   backgroundColor: COLORS.brown4,
@@ -502,10 +511,10 @@ const FindLawyerScreen = () => {
                 
                 }}
               >
-                <Text style={{ color: "#000" }}>
+                <Text style={{ color: "#000" }}>User Name : 
                   {item.personalDetails.userName}
                 </Text>
-                <Text style={{ color: "#000" }}>
+                <Text style={{ color: "#000" }}>Name : 
                   {item.personalDetails.name}
                 </Text>
               </TouchableOpacity>

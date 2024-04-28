@@ -3,7 +3,7 @@ import React,{useState,useEffect} from 'react'
 import COLORS from './../../../../constants/Color';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { BASE_URL } from '../../../../constants/Url';
 
 
 const BlogScreen = ({ navigation }) => {

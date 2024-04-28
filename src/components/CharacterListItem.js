@@ -5,7 +5,7 @@ import CommentsLikesBar from './CommentsLikesBar';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native'; 
 import * as SecureStore from 'expo-secure-store';
-
+import {BASE_URL} from './../constants/Url'
 const CharacterListItem = ({ character, isLiked, setIsLiked }) => {
   const likesCount = character.likes.length;
   const [myLike, setMyLike] = useState(character.isLiked);
@@ -18,7 +18,7 @@ const CharacterListItem = ({ character, isLiked, setIsLiked }) => {
   const fetchLikes = async () => {
     try {
       const token = await SecureStore.getItemAsync('authToken');
-      const response = await fetch(`http://localhost:3000/user/likeorUnlikeBlog`, {
+      const response = await fetch(`${BASE_URL}/user/likeorUnlikeBlog`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

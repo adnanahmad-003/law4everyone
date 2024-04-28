@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/Input';
 import Button from '../../components/Botton';
 import * as SecureStore from 'expo-secure-store';
+import {BASE_URL} from './../../constants/Url';
 //user redux
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserData } from '../../../Redux/action';
@@ -44,7 +45,7 @@ const AdvocateLogin = () => {
   const login= async () => { 
     try {
       //setLoading(false);
-      const apiUrl = 'http://localhost:3000/advocate/signin';
+      const apiUrl = `${BASE_URL}/advocate/signin`;
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {

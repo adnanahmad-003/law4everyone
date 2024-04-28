@@ -6,6 +6,7 @@ import COLORS from './../../../../constants/Color';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { EvilIcons } from "@expo/vector-icons";
 import * as SecureStore from "expo-secure-store";
+import {BASE_URL} from './../../../../constants/Url';
 import { Entypo } from "@expo/vector-icons";
 const FilterModal = ({
   isOpen,
@@ -157,7 +158,7 @@ const AddBlog = ({navigation}) => {
         name: 'image1.jpg' 
       });
   
-      const response = await fetch('http://localhost:3000/advocate/postBlog', {
+      const response = await fetch(`${BASE_URL}/advocate/postBlog`, {
         method: 'POST',
         body: formData,
         headers: {

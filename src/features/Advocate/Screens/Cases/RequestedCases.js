@@ -2,11 +2,12 @@ import React, { useState, useEffect} from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView ,ActivityIndicator} from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native"; 
-
+import { BASE_URL } from "../../../../constants/Url";
+import Loader from "../../../../components/Loader";
 const RequestedCases = ({ navigation }) => {
   const [queries, setQueries] = useState([]);
   const [userDetails , setUserDetails]= useState([]);
- 
+  const [isLoading, setIsLoading] = React.useState(false);
   useEffect(() => {
     fetchData();
   }, []);
@@ -18,9 +19,9 @@ const RequestedCases = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      
+      isLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
-      const response = await fetch("http://localhost:3000/advocate/getRequestedProblems", {
+      const response = await fetch(`${BASE_URL}/advocate/getRequestedProblems`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -31,7 +32,7 @@ const RequestedCases = ({ navigation }) => {
       //console.log(data);
         setQueries(data.requestedProblems.problemDetails);
         setUserDetails(data.requestedProblems.userDetails);
-        
+        isLoading(false);
      
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -46,7 +47,7 @@ const RequestedCases = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-     
+      
       <Text style={styles.title}>Requested Cases</Text>
       {queries && queries.map((problem, index) => (
   <View key={problem._id} style={styles.queryContainer}>
@@ -61,7 +62,7 @@ const RequestedCases = ({ navigation }) => {
     <Text style={styles.queryStatus}>Status: {problem.status}</Text>
   </View>
 ))}
-  
+  <Loader visible={isLoading} />
     </ScrollView>
   );
 };

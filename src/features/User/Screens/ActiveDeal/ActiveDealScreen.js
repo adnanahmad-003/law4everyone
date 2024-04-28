@@ -1,12 +1,16 @@
 import React, { useState, useEffect} from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity , Platform  } from "react-native";
 //import { useSelector } from 'react-redux';
 import * as SecureStore from "expo-secure-store";
-import { useFocusEffect } from "@react-navigation/native"; 
+import { useFocusEffect } from "@react-navigation/native";
+import { BASE_URL } from './../../../../constants/Url';
+import COLORS from './../../../../constants/Color';
+import Loader from './../../../../components/Loader';
 const ActiveDealScreen = ({ navigation }) => {
   const [queries, setQueries] = useState([]);
   //const queries = useSelector(state => state.deals.queries);
-
+ //console.log(BASE_URL);
+ const{isLoading,setIsLoading}=useState(false);
   //Get request
   useEffect(() => {
     fetchData();
@@ -19,8 +23,9 @@ const ActiveDealScreen = ({ navigation }) => {
   );
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
-      const response = await fetch("http://localhost:3000/user/getProblems", {
+      const response = await fetch(`${BASE_URL}/user/getProblems`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -30,6 +35,7 @@ const ActiveDealScreen = ({ navigation }) => {
       const data = await response.json();
 
      // console.log(data);
+     setIsLoading(false);
       setQueries(data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -42,6 +48,7 @@ const ActiveDealScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',margin:10}}>
       <Text style={styles.title}>Active Cases</Text>
       <TouchableOpacity
         style={styles.addButton}
@@ -55,6 +62,7 @@ const ActiveDealScreen = ({ navigation }) => {
       >
         <Text style={styles.addButtonText}>Case Notification</Text>
       </TouchableOpacity>
+      </View>
       {queries.problems &&
         queries.problems.map((problem) => (
           <TouchableOpacity
@@ -70,6 +78,7 @@ const ActiveDealScreen = ({ navigation }) => {
             <Text style={styles.queryStatus}>Status: {problem.status}</Text>
           </TouchableOpacity>
         ))}
+         <Loader visible={isLoading} />
     </View>
   );
 };
@@ -82,13 +91,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 20,
+    color:COLORS.brown2
   },
   queryContainer: {
     margin: 5,
-    backgroundColor: "#fefefe",
+    backgroundColor: COLORS.brown4,
     padding: 20,
     borderRadius: 10,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgba(0, 0, 0, 0.2)',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   queryTitle: {
     fontSize: 18,
@@ -108,7 +128,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   addButton: {
-    backgroundColor: "blue",
+    backgroundColor: COLORS.brown1,
     padding: 10,
     borderRadius: 5,
     alignSelf: "flex-end",

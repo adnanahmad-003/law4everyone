@@ -4,10 +4,14 @@ import { View, Text, StyleSheet, TouchableOpacity,Image } from "react-native";
 import COLORS from './../../../../constants/Color';
 import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native"; 
+import {BASE_URL} from './../../../../constants/Url';
+import Loader from "../../../../components/Loader";
 const AccountPage = ({ navigation }) => {
   const [isWorking, setIsWorking] = useState(false);
   const [accountDetails, setAccountDetails] = useState( {});
+  const [isLoading, setIsLoading] = React.useState(false);
  useEffect(() => {
+    setIsLoading(true);
     fetchData();
   }, []);
 
@@ -19,7 +23,7 @@ const AccountPage = ({ navigation }) => {
   const fetchData = async () => {
     try {
       const token = await SecureStore.getItemAsync("authToken");
-      const response = await fetch("http://localhost:3000/advocate/getProfileDetails", {
+      const response = await fetch(`${BASE_URL}/advocate/getProfileDetails`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +31,7 @@ const AccountPage = ({ navigation }) => {
         },
       });
       const data = await response.json();
-
+       setIsLoading(false);
       //console.log(data.message);
      setAccountDetails(data.advocate);
      setIsWorking(data.advocate.workStatus);
@@ -43,7 +47,7 @@ const AccountPage = ({ navigation }) => {
     setIsWorking(!isWorking);
     try {
       const token = await SecureStore.getItemAsync("authToken");
-      const response = await fetch("http://localhost:3000/advocate/changeWorkStatus", {
+      const response = await fetch(`${BASE_URL}/advocate/changeWorkStatus`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,6 +98,7 @@ const AccountPage = ({ navigation }) => {
           </Text>
         </View>
       </View>
+      <Loader visible={isLoading} />
     </View>
     
   );

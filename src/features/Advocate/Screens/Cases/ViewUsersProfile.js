@@ -5,12 +5,13 @@ import COLORS from './../../../../constants/Color';
 import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native"; 
 import { useNavigation ,useRoute} from '@react-navigation/native';
+import {BASE_URL} from './../../../../constants/Url';
 //import { useSelector } from 'react-redux';
 const ViewUsersProfile = () => {
   //const advocateId = useSelector((state) => state.advocateId); 
   const route = useRoute();
   const { userId } = route.params; 
-  //console.log(userId);
+ 
   const [accountDetails, setAccountDetails] = useState({});
  useEffect(() => {
     fetchData();
@@ -25,7 +26,7 @@ const ViewUsersProfile = () => {
     try {
       const token = await SecureStore.getItemAsync("authToken");
       //console.log(userId,'UserId');
-      const response = await fetch("http://localhost:3000/advocate/viewUserProfile", {
+      const response = await fetch(`${BASE_URL}/advocate/viewUserProfile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

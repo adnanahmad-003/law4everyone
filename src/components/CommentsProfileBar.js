@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
-
+// source={{uri : profileImage}}
 const CommentsProfileBar = ({ profileImage, profileName }) => {
   return (
     <View style={styles.profileBar}>

@@ -200,7 +200,7 @@ const SignupLawyer = () => {
                 fontSize: 31,
                 textAlign: "center",
                 fontWeight: "600",
-                color: "white",
+                color: COLORS.brown1,
               }}
             >
               Advocate Register
@@ -216,6 +216,7 @@ const SignupLawyer = () => {
                   label="Email"
                   placeholder="Enter your email address"
                   error={errors.email}
+                  placeholderTextColor="white" 
                 />
 
                 <Input
@@ -225,6 +226,7 @@ const SignupLawyer = () => {
                   label="Full Name"
                   placeholder="Enter your full name"
                   error={errors.fullname}
+                  placeholderTextColor="white" 
                 />
 
                 <Input
@@ -235,6 +237,7 @@ const SignupLawyer = () => {
                   label="Phone Number"
                   placeholder="Enter your phone no"
                   error={errors.phone}
+                  placeholderTextColor="white" 
                 />
 
                 <Input
@@ -244,6 +247,7 @@ const SignupLawyer = () => {
                   label="Password"
                   placeholder="Enter your password"
                   error={errors.password}
+                  placeholderTextColor="white" 
                   password
                 />
 
@@ -254,10 +258,11 @@ const SignupLawyer = () => {
               <View style={{ marginTop: 50, height: 620 }}>
                 <Text
                   style={{
-                    fontSize: 28,
-                    textAlign: "left",
-                    fontWeight: "600",
-                    color: "white",
+                    fontSize: 22,
+                    textAlign: "center",
+                    fontWeight: "300",
+                    color: COLORS.brown1,
+                    margin:10,
                   }}
                 >
                   Upload Your Current Profile Picture
@@ -266,13 +271,14 @@ const SignupLawyer = () => {
 
                 <Text
                   style={{
-                    fontSize: 28,
-                    textAlign: "left",
-                    fontWeight: "600",
-                    color: "white",
+                    fontSize: 22,
+                    textAlign: "center",
+                    fontWeight: "300",
+                    color: COLORS.brown1,
+                    margin:10,
                   }}
                 >
-                  Upload Your Current Profile Picture
+                  Upload Your ID
                 </Text>
                 <UploadIdentity setImageUri={handleSetProfileImageUri2}/>
 
@@ -290,6 +296,7 @@ const SignupLawyer = () => {
                   label="Bar Council Registration Number"
                   placeholder="Enter your Bar Council Registration Number"
                   error={errors.registrationNumber}
+                  placeholderTextColor="white" 
                 />
                 <Input
                   onChangeText={(text) => handleOnchange(text, "experience")}
@@ -298,12 +305,14 @@ const SignupLawyer = () => {
                   label="Practice years"
                   placeholder="Number of years of experience in legal practice"
                   error={errors.experience}
+                  placeholderTextColor="white" 
                 />
                 <Input
                   onChangeText={(text) => handleOnchange(text, "bio")}
                   iconName="application-edit"
                   label="Profile bio"
                   placeholder="Write about yourself"
+                  placeholderTextColor="white" 
                 />
                 <View>
                   <View>
@@ -311,9 +320,10 @@ const SignupLawyer = () => {
                       style={{
                         fontSize: 17,
                         textAlign: "left",
-                        fontWeight: "400",
-                        color: "white",
+                        fontWeight: "600",
+                        color: COLORS.brown1,
                         marginBottom: 10,
+                       
                       }}
                     >
                       Select your Expertise
@@ -335,10 +345,11 @@ const SignupLawyer = () => {
                           style={{
                             padding: 10,
                             borderWidth: 1,
-                            borderColor: "gray",
-                            marginBottom: 5,
+                            borderColor: COLORS.brown4,
+                            margin: 5,
                             borderRadius: 5,
-                            color: "#fff",
+                            color: COLORS.brown1,
+                            borderRadius:10
                           }}
                         >
                           {item}
@@ -349,15 +360,15 @@ const SignupLawyer = () => {
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <TextInput
                       style={{
-                        color: "#fff",
+                        color: COLORS.brown1,
                         height: 40,
-                        borderColor: "#fff",
+                        borderColor: COLORS.brown1,
                         borderWidth: 2,
                         flex: 2,
                         paddingHorizontal: 10,
                       }}
                       placeholder="Add more expertise"
-                      placeholderTextColor={"#fff"}
+                      placeholderTextColor={COLORS.brown1}
                       value={newExpertise}
                       onChangeText={(text) => setNewExpertise(text)}
                       onSubmitEditing={handleAddExpertise}
@@ -366,7 +377,7 @@ const SignupLawyer = () => {
                       style={{ backgroundColor: COLORS.purple }}
                       onPress={handleAddExpertise}
                     >
-                      <Text style={{ color: "#fff", padding: 10, flex: 1 }}>
+                      <Text style={{color: "#fff", padding: 10, flex: 1 ,backgroundColor:COLORS.brown1}}>
                         Add
                       </Text>
                     </TouchableOpacity>
@@ -378,7 +389,7 @@ const SignupLawyer = () => {
                       keyExtractor={(item, index) => index.toString()}
                       style={{
                         paddingVertical: 10,
-                        borderColor: "#fff",
+                        borderColor: COLORS.brown1,
                         borderWidth: 2,
                         marginVertical: 5,
                       }}
@@ -388,18 +399,20 @@ const SignupLawyer = () => {
                           onPress={() => handleRemoveExpertise(item)}
                           style={{
                             marginHorizontal: 6,
-                            backgroundColor: "#f0f0f0",
+                            backgroundColor: COLORS.brown6,
                             marginRight: 5,
                             marginBottom: 5,
-                            borderRadius: 10,
+                            borderRadius: 6,
                             flexDirection: "row",
+                            
                             alignItems: "center",
                           }}
                         >
-                          <EvilIcons name="close-o" size={24} color="black" />
+                          <EvilIcons name="close-o" size={24} color='#7f5539' />
                           <Text
                             style={{
                               padding: 5,
+                              color:COLORS.brown1
                             }}
                           >
                             {item}
@@ -421,11 +434,11 @@ const SignupLawyer = () => {
               marginTop: 12,
             }}
           >
-            <Text style={{ fontSize: 15, color: "white", marginBottom: 30 }}>
+            <Text style={{ fontSize: 15, color: COLORS.brown4, marginBottom: 30 }}>
               Already have a account{" "}
             </Text>
             <Pressable onPress={() => navigation.goBack()}>
-              <Text style={{ color: "#7727C8" }}>Login</Text>
+              <Text style={{ color: COLORS.brown1 }}>Login</Text>
             </Pressable>
           </View>
         </ImageBackground>

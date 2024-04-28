@@ -1,5 +1,6 @@
 import CharacterListItem from "../../../../components/CharacterListItem";
 import * as SecureStore from "expo-secure-store";
+import {BASE_URL} from './../../../../constants/Url';
 import {
   ActivityIndicator,
   Alert,
@@ -16,7 +17,7 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-
+import Loader from './../../../../components/Loader';
 const BlogFeed = () => {
   const [skip, setSkip] = useState(0);
   const limit = 4;
@@ -40,7 +41,7 @@ const BlogFeed = () => {
     try {
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/getBlogs?skip=${skip}&limit=${limit}`,
+        `${BASE_URL}/user/getBlogs?skip=${skip}&limit=${limit}`,
         {
           method: "GET",
           headers: {

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { BASE_URL } from '../../../../constants/Url';
+import Loader from '../../../../components/Loader';
 const HomeScreen = () => {
   const [accountDetails, setAccountDetails] = useState({});
-
+  const{isLoading,setIsLoading}=useState(false);
   useEffect(() => {
     fetchData();
   }, []);
@@ -18,8 +19,9 @@ const HomeScreen = () => {
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
-      const response = await fetch("http://localhost:3000/user/getUserProfile", {
+      const response = await fetch(`${BASE_URL}/user/getUserProfile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -30,6 +32,7 @@ const HomeScreen = () => {
 
       console.log(data.message);
       setAccountDetails(data.user);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -65,6 +68,7 @@ const HomeScreen = () => {
           </Text>
         </View>
       </View>
+      <Loader visible={isLoading} />
     </View>
   );
 }
