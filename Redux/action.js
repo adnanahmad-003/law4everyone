@@ -39,3 +39,16 @@ export const updateQuery = (queryId, newTitle, newDetails, newEndDate, newStatus
   },
 });
 
+
+//advocate id
+export const addAdvocateId = (advocateId) => ({
+  type: 'ADD_ADVOCATE_ID',
+  payload: advocateId,
+});
+
+//user id
+export const addUserId = (userId) => ({
+  type: 'ADD_USER_ID',
+  payload: userId,
+});
+

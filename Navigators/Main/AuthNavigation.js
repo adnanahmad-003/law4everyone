@@ -9,12 +9,13 @@ import TabNavigator from '../User/TabNavigator';
 import LawyerTabNavigator from '../Advocate/LawyerTabNavigator';
 import CommentScreen from "../../src/components/CommentsScreen";
 import AdvocateLogin from "../../src/features/Common/AdvocateLogin";
+import ViewAdvocateProfile from "./../../src/components/ViewAdvocateProfile"
 const Stack = createNativeStackNavigator();
 
 const AuthStackNavigator = () => {
   return (
     <NavigationContainer>
-    <Stack.Navigator initialRouteName='Login'>
+    <Stack.Navigator initialRouteName='UserTabs'>
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="AdvocateLogin" component={AdvocateLogin} options={{ headerShown: false }} />
       <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
@@ -23,6 +24,7 @@ const AuthStackNavigator = () => {
       <Stack.Screen name="UserTabs" component={TabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="LawyerTabs" component={LawyerTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="CommentScreen" component={CommentScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ViewAdvocateProfile" component={ViewAdvocateProfile} options={{ headerShown: false }} />
     </Stack.Navigator>
     </NavigationContainer>
   );

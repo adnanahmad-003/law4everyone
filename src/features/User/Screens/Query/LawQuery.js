@@ -45,12 +45,12 @@ const LawQuery = () => {
 
     //chats
     const RenderItem = ({ item }) => (<>
-        <View style={{ backgroundColor: COLORS.purple, margin: 3, padding: 5, borderRadius: 4, width: "50%", marginLeft: "47%" }}>
+        <View style={{ backgroundColor: COLORS.brown4, margin: 3, padding: 5, borderRadius: 4, width: "50%", marginLeft: "47%" }}>
 
             <Text style={{ textAlign: "left", color: COLORS.white, padding: 3 }}>{item.question}</Text>
 
         </View>
-        <View style={{ backgroundColor: COLORS.purple, margin: 3, padding: 5, borderRadius: 4, width: "50%" }}>
+        <View style={{ backgroundColor: COLORS.brown4, margin: 3, padding: 5, borderRadius: 4, width: "50%" }}>
 
 
             <Text style={{ textAlign: "left", color: COLORS.white, padding: 3 }}>{item.answer}</Text>
@@ -185,7 +185,7 @@ const LawQuery = () => {
 
         < SafeAreaView style={{ marginTop: 10, flex: 1 }}>
 
-            <View style={{ backgroundColor: COLORS.purple, padding: 8, marginHorizontal: 6, borderRadius: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <View style={{ backgroundColor: COLORS.brown2, padding: 8, marginHorizontal: 6, borderRadius: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
 
                 <View><Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", marginRight: 10 }}>Ask your question</Text></View>
             </View>
@@ -205,12 +205,12 @@ const LawQuery = () => {
 
                     {sound && (
                         <View style={{ flexDirection: "row", marginLeft: "45%" }}>
-                            <TouchableOpacity onPress={playRecording} style={{ backgroundColor: COLORS.purple, margin: 3, padding: 8, borderRadius: 13, width: "40%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <AntDesign name="play" size={24} color={play ? '#fff' : '#ff0000'} />
+                            <TouchableOpacity onPress={playRecording} style={{ backgroundColor: COLORS.brown1, margin: 3, padding: 8, borderRadius: 13, width: "40%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                <AntDesign name="play" size={24} color={play ? '#fff' : COLORS.brown4} />
                                 <Text style={{ color: COLORS.white }}>Play</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={stopPlayback} style={{ backgroundColor: COLORS.purple, margin: 3, padding: 8, borderRadius: 13, width: "40%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <AntDesign name="pausecircle" size={24} color={play ? '#ff0000' : '#fff'} />
+                            <TouchableOpacity onPress={stopPlayback} style={{ backgroundColor: COLORS.brown1, margin: 3, padding: 8, borderRadius: 13, width: "40%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                <AntDesign name="pausecircle" size={24} color={play ? COLORS.brown4 : '#fff'} />
                                 <Text style={{ color: COLORS.white }}>Stop</Text>
                             </TouchableOpacity>
                         </View>
@@ -240,7 +240,7 @@ const LawQuery = () => {
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: recording ? COLORS.red : COLORS.purple,
+                        backgroundColor: recording ? COLORS.red : COLORS.brown4,
 
 
                     }} >

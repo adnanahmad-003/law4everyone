@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View ,Image,ScrollView,Alert} from 'react-native'
 import React,{useState,useEffect} from 'react'
-
+import COLORS from './../../../../constants/Color';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -52,21 +52,29 @@ const BlogScreen = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-       <ScrollView style={styles.container}>
-      {blogs.map((blog, index) => (
-        <View key={index} style={styles.blogContainer}>
-          <Text style={styles.title}>{blog.title}</Text>
-          <Image source={{ uri: blog.image }} style={styles.image} />
-          <Text style={styles.content}>{blog.content}</Text>
-          <Text style={styles.tags}>Tags: {blog.tags}</Text>
-          <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(index)}>
-            <Text style={styles.deleteButtonText}>Delete</Text>
-          </TouchableOpacity>
+      <ScrollView>
+        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
+        <Text style={{fontSize:25,fontWeight:'600',color:COLORS.brown1}}>All Your Blogs</Text>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddBlog')}>
+          <Text style={styles.addButtonText}>Add Blog</Text>
+        </TouchableOpacity>
         </View>
-      ))}
-      <TouchableOpacity onPress={() => navigation.navigate('AddBlog')}><Text>Add Blog</Text></TouchableOpacity>
-    </ScrollView>
-      
+        {blogs.map((blog, index) => (
+          <View key={index} style={styles.blogContainer}>
+            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
+            <Text style={styles.title}>{blog.title}</Text>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(index)}>
+              <Text style={styles.deleteButtonText}>Delete</Text>
+            </TouchableOpacity>
+            </View>
+           
+            <Image source={{ uri: blog.image }} style={styles.image} />
+            <Text style={styles.content}>description : {blog.content}</Text>
+            <Text style={styles.tags}>Tags: {blog.tags}</Text>
+           
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -77,10 +85,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
+  blogContainer: {
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingBottom: 20,
+  },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 19,
+    fontWeight: '500',
     marginBottom: 10,
+    color:COLORS.brown2,
   },
   image: {
     width: '100%',
@@ -91,11 +106,33 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     marginBottom: 10,
+    color:COLORS.brown2,
   },
   tags: {
     fontSize: 14,
     fontStyle: 'italic',
-    color: '#666',
+    color:COLORS.brown2,
+  },
+  deleteButton: {
+    backgroundColor: COLORS.brown4,
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  addButton: {
+    backgroundColor: COLORS.brown1,
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+  addButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

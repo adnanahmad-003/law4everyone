@@ -1,12 +1,17 @@
 import React, { useState, useEffect} from "react";
 import { View, Text, StyleSheet, TouchableOpacity,Image } from "react-native";
 //import { useSelector } from 'react-redux';
-import COLORS from './../../../../constants/Color';
+import COLORS from "../constants/Color";
 import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native"; 
-const AccountPage = ({ navigation }) => {
-  const [isWorking, setIsWorking] = useState(false);
-  const [accountDetails, setAccountDetails] = useState( {});
+import { useRoute} from '@react-navigation/native';
+//import { useSelector } from 'react-redux';
+const ViewAdvocateProfile = () => {
+  //const advocateId = useSelector((state) => state.advocateId); 
+  const route = useRoute();
+  const { advocateId } = route.params; 
+  //console.log(userId);
+  const [accountDetails, setAccountDetails] = useState({});
  useEffect(() => {
     fetchData();
   }, []);
@@ -19,18 +24,20 @@ const AccountPage = ({ navigation }) => {
   const fetchData = async () => {
     try {
       const token = await SecureStore.getItemAsync("authToken");
-      const response = await fetch("http://localhost:3000/advocate/getProfileDetails", {
-        method: "GET",
+      //console.log(userId,'UserId');
+      const response = await fetch("http://localhost:3000/user/viewAdvocateProfile", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+       
+        body: JSON.stringify({ advocateId:advocateId}), 
       });
       const data = await response.json();
-
-      //console.log(data.message);
-     setAccountDetails(data.advocate);
-     setIsWorking(data.advocate.workStatus);
+      
+     setAccountDetails(data.advocateInfo);
+     
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -38,44 +45,15 @@ const AccountPage = ({ navigation }) => {
   const image = `data:image/png;base64,${accountDetails.profileImage}`;
 
   
-//console.log(isWorking);
-  const handleToggle = async() => {
-    setIsWorking(!isWorking);
-    try {
-      const token = await SecureStore.getItemAsync("authToken");
-      const response = await fetch("http://localhost:3000/advocate/changeWorkStatus", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const status = await response.json();
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+
  
   return (
     <View style={styles.container}>
-
+     <Text style={styles.title}>Advocate account details</Text>
       <View style={styles.profileInfo}>
       <Image source={{uri : image}} style={styles.profileImage} />
         <Text style={styles.username}>{accountDetails.userName}</Text>
         <Text style={styles.name}>{accountDetails.name}</Text>
-        <Text>{accountDetails.bio}</Text>
-        <View style={styles.header}>
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
-        
-      </View>
-      <TouchableOpacity
-      style={[styles.button, isWorking && styles.buttonActive]}
-      onPress={handleToggle}
-    >
-      <Text style={styles.buttonText}>Work Status : {isWorking ? 'ON' : 'OFF'}</Text>
-    </TouchableOpacity>
       </View>
 
       <View style={styles.detailsContainer}>
@@ -95,7 +73,6 @@ const AccountPage = ({ navigation }) => {
         </View>
       </View>
     </View>
-    
   );
 };
 
@@ -141,12 +118,6 @@ const styles = StyleSheet.create({
     color: COLORS.brown1,
     marginBottom: 5,
   },
-  bio: {
-    fontSize: 14,
-    color: '#777',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
   detailsContainer: {
     paddingHorizontal: 20,
   },
@@ -177,6 +148,13 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
+  title:{
+    fontSize:20,
+    fontWeight:'600',
+    color:COLORS.brown1,
+    margin:10
+  }
 });
 
-export default AccountPage;
+export default ViewAdvocateProfile;
+

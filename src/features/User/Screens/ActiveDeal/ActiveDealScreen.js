@@ -49,6 +49,12 @@ const ActiveDealScreen = ({ navigation }) => {
       >
         <Text style={styles.addButtonText}>Add Cases</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate("NotificationUser")}
+      >
+        <Text style={styles.addButtonText}>Case Notification</Text>
+      </TouchableOpacity>
       {queries.problems &&
         queries.problems.map((problem) => (
           <TouchableOpacity

@@ -4,6 +4,8 @@ import { combineReducers } from 'redux';
 
 const initialState = {
   strings: [],
+  advocateIds: [], 
+  userIds: [],
   user: {
     userName: '',
     location: '',
@@ -79,12 +81,36 @@ const dealsReducer = (state = initialState, action) => {
       return state;
   }
 };
+const advocateIdsReducer = (state = initialState.advocateIds, action) => {
+  switch (action.type) {
+    case 'ADD_ADVOCATE_ID':
+      return [
+        ...state,
+        action.payload
+      ];
+    default:
+      return state;
+  }
+};
+const userIdsReducer = (state = initialState.userIds, action) => {
+  switch (action.type) {
+    case 'ADD_USER_ID':
+      return [
+        ...state,
+        action.payload
+      ];
+    default:
+      return state;
+  }
+};
 
 
 const rootReducer = combineReducers({
   strings:stringsReducer,
   user: userReducer,
   deals: dealsReducer,
+  advocateIds: advocateIdsReducer,
+  userIds: userIdsReducer,
 });
 
 export default rootReducer;

@@ -16,13 +16,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileImage: {
-    width: 50, // Adjust size as needed
-    height: 50, // Adjust size as needed
-    borderRadius: 25, // Ensures the image is circular
-    marginRight: 10, // Adjust spacing between image and name
+    width: 50, 
+    height: 50, 
+    borderRadius: 25, 
+    marginLeft: 20, 
+    marginRight:10
   },
   profileName: {
-    fontSize: 16, // Adjust font size as needed
+    fontSize: 16,
+    fontWeight:'500'
   },
 });
 

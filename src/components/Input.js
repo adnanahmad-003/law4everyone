@@ -30,7 +30,7 @@ const Input = ({label,
           style={{color: COLORS.white, fontSize: 22, marginRight: 10}}
         />
         <TextInput
-        autoCapitalize={false}
+          autoCapitalize="none"  
           autoCorrect={false}
           onFocus={() => {
             onFocus();

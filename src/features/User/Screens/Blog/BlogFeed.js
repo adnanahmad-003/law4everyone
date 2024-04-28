@@ -107,7 +107,7 @@ const BlogFeed = () => {
     return null;
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 ,backgroundColor:'#fff'}}>
       <FlatList
         data={items}
         renderItem={renderItem}

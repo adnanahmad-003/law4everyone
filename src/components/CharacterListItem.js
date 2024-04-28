@@ -13,7 +13,8 @@ const CharacterListItem = ({ character, isLiked, setIsLiked }) => {
   const [likes, setLikes] = useState(likesCount);
   const navigation = useNavigation();
   const blogId = character.blogId;
- console.log(isLiked);
+  const advocateId = character.advocateId;
+ //console.log(isLiked);
   const fetchLikes = async () => {
     try {
       const token = await SecureStore.getItemAsync('authToken');
@@ -50,16 +51,22 @@ const CharacterListItem = ({ character, isLiked, setIsLiked }) => {
   const handleCommentsPress = () => {
     navigation.navigate('CommentScreen', { blogId: blogId , precomments : character.comments });
   };
+  const handleNavigatetoAdvocate = () => {
+    navigation.navigate('ViewAdvocateProfile', {advocateId:advocateId});
+  };
+
 
   const image = `data:image/png;base64,${character.image}`;
   const userImage = `data:image/png;base64,${character.advocates[0].personalDetails.profileImage}`;
 
   return (
     <View style={styles.container}>
-      <ProfileBar profileImage={userImage} profileName={character.advocates[0].personalDetails.userName}/>
-      <Text style={styles.name}>{character.name}</Text>
+      <TouchableOpacity onPress={handleNavigatetoAdvocate}>
+      <ProfileBar profileImage={userImage} profileName={character.advocates[0].personalDetails.userName} />
+      </TouchableOpacity>
+      <Text style={styles.name}></Text>
       <Image source={{ uri: image}} style={styles.image} />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      
         <CommentsLikesBar
           isLiked= {myLike}
           comments={commentsCount}
@@ -67,28 +74,43 @@ const CharacterListItem = ({ character, isLiked, setIsLiked }) => {
           onLikePress={handleLikePress}
           onCommentsPress={handleCommentsPress}
         />
-      </View>
+        <View><Text style={styles.description}>description:  {character.description}</Text></View>
+    
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'gray',
-    flex: 1,
+    margin:10,
+    backgroundColor: '#fff',
+    paddingTop:10,
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   name: {
-    height: 20,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: 'darkslategrey',
-    alignSelf:'flex-start',
-    marginVertical: 10,
+    marginLeft: 10,
+    marginTop: 10,
+  },
+  description: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginLeft: 15,
+    marginTop: 3,
+    marginBottom:10
   },
   image: {
     width: '100%',
-    aspectRatio: 1,
+    height: 340,
   },
 });
 

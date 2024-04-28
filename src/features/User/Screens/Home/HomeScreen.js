@@ -1,168 +1,135 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, Text, View, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
-
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import * as SecureStore from "expo-secure-store";
-import { useFocusEffect } from "@react-navigation/native"; 
-//redux to set location
-import { useDispatch, useSelector } from 'react-redux';
-import { updateLocation } from '../../../../../Redux/action';
+import { useFocusEffect } from "@react-navigation/native";
 
-
-import * as Location from 'expo-location';
 const HomeScreen = () => {
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
- // const [responseData, setResponseData] = useState(null);
-  const [postResponse, setPostResponse] = useState(null);
-
-
-  const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user);
-
-  const handleLocationUpdate = () => {
-    const newLocation = [location]; 
-    dispatch(updateLocation(newLocation));
-    console.log(userData);
-  };
-
-  /*const postData = async () => {
-    try {
-      const response = await fetch('YOUR_POST_ENDPOINT', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(responseData),
-      });
-      const data = await response.json();
-      setPostResponse(data);
-    } catch (error) {
-      console.error('Error posting data: ', error);
-    }
-  };*/
+  const [accountDetails, setAccountDetails] = useState({});
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      const newLocation = [location]; 
-      dispatch(updateLocation(newLocation));
-      console.log(userData);
-    })();
+    fetchData();
   }, []);
 
-
-
-  const [accountDetails, setAccountDetails] = useState( {
-    email: "",
-    fullname: "",
-    phone: "",
-   });
-  
-  
-    //Get request
-  /*  useEffect(() => {
+  useFocusEffect(
+    React.useCallback(() => {
       fetchData();
-    }, []);
-  
-    useFocusEffect(
-      React.useCallback(() => {
-        fetchData();
-      }, [])
-    );
-    const fetchData = async () => {
-      try {
-        const token = await SecureStore.getItemAsync("authToken");
-        const response = await fetch("http://localhost:3000/user/getProblems", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-  
-       // console.log(data);
-        setAccountDetails(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };*/
-  
+    }, [])
+  );
 
- /* useEffect(() => {
-    if (location) {
-      (async () => {
-        try {
-          const { latitude, longitude } = location.coords;
-          const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
-          const json = await response.json();
-          setResponseData(json);
-        } catch (error) {
-          console.error('Error fetching data: ', error);
-        }
-      })();
+  const fetchData = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("authToken");
+      const response = await fetch("http://localhost:3000/user/getUserProfile", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+
+      console.log(data.message);
+      setAccountDetails(data.user);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-  }, [location]);
-  let text = 'Waiting..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }*/
-
+  };
+  const image = `data:image/png;base64,${accountDetails.profileImage}`;
   return (
-    <View style={{flex:1}}>
-      <Text style={styles.title}>Account Details</Text>
-      <TouchableOpacity onPress={handleLocationUpdate}>
-        <Text >Enable location</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
 
-      <View style={styles.container}>
-        
-        <TouchableOpacity style={styles.addButton}>
-          <Text>Edit account details</Text>
+      <View style={styles.profileInfo}>
+      <Image source={{uri : image}} style={styles.profileImage} />
+        <Text style={styles.username}>{accountDetails.userName}</Text>
+        <Text style={styles.name}>{accountDetails.name}</Text>
+        <View style={styles.header}>
+        <TouchableOpacity style={styles.editButton}>
+          <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
+      </View>
+      </View>
 
-        <View>
-          <Text>{accountDetails.email}</Text>
-          <Text>{accountDetails.fullname}</Text>
-          <Text>{accountDetails.phone}</Text>
+      <View style={styles.detailsContainer}>
+        <View style={styles.detailsItem}>
+          <Text style={styles.detailsTitle}>Email</Text>
+          <Text style={styles.detailsText}>{accountDetails.email}</Text>
+        </View>
+        <View style={styles.detailsItem}>
+          <Text style={styles.detailsTitle}>Phone</Text>
+          <Text style={styles.detailsText}>{accountDetails.phone}</Text>
+        </View>
+        <View style={styles.detailsItem}>
+          <Text style={styles.detailsTitle}>Location</Text>
+          <Text style={styles.detailsText}>
+            {accountDetails.address?.city}, {accountDetails.address?.state}, {accountDetails.address?.zipCode}
+          </Text>
         </View>
       </View>
     </View>
   );
 }
 
-
-
 const styles = StyleSheet.create({
   container: {
-    padding: 8,
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  title: {
-    color:'#7727C8',
-    fontSize: 20,
-    fontWeight: "bold",
+  header: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  editButton: {
+    backgroundColor: '#9c6644',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 5,
+  },
+  editButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  profileInfo: {
+    alignItems: 'center',
+    padding: 20,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  username: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  name: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 5,
+  },
+  bio: {
+    fontSize: 14,
+    color: '#777',
+    textAlign: 'center',
     marginBottom: 20,
   },
-  addButton: {
-    backgroundColor:'blue',
-    padding: 10,
-    borderRadius: 5,
-    alignSelf: "flex-end",
-    marginTop: 20,
+  detailsContainer: {
+    paddingHorizontal: 20,
   },
-  addButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+  detailsItem: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    paddingVertical: 10,
+  },
+  detailsTitle: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  detailsText: {
+    color: '#777',
   },
 });
 
