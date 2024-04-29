@@ -9,7 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 const Notification = () => {
     
     const[advocate,setAdvocates]=useState([]);
-    const{isLoading,setIsLoading}=useState(false);
+    const[isLoading,setIsLoading]=useState(false);
    
   useEffect(() => {
     fetchData();
@@ -61,6 +61,11 @@ const Notification = () => {
           </View>
         </View>
       ))}
+       {advocate.length == 0 && (
+        <Text style={{ margin: 10, fontSize: 14, fontWeight: "500" }}>
+          No notification
+        </Text>
+      )}
       <Loader visible={isLoading} />
   </ScrollView>
   )

@@ -79,7 +79,7 @@ const FilterModal = ({
   );
 };
 const FindLawyerScreen = () => {
-  const{isLoading,setIsLoading}=useState(false);
+  const[isLoading,setIsLoading]=useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchMode, setSearchMode] = useState("normal");
   const [advancedSearchOption, setAdvancedSearchOption] = useState("userName");
@@ -261,7 +261,7 @@ const FindLawyerScreen = () => {
 
       const data = await response.json();
       setIsLoading(false);
-      console.log(data);
+     // console.log(data);
       setAdvocatesList(data.advocate);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -312,58 +312,70 @@ const FindLawyerScreen = () => {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor:'#fff' }}>
-       <ImageBackground
-        source={require("./../../../../../assets/Images/hero.png")} 
-        style={{ height: 400,alignSelf:'center',width:500}}
-        resizeMode='cover'
+    <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <ImageBackground
+        source={require("./../../../../../assets/Images/hero.png")}
+        style={{ height: 400, alignSelf: "center", width: 500 }}
+        resizeMode="cover"
       >
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginHorizontal: 50,
-          marginVertical:170
-        }}
-      >
-        
-        <TouchableOpacity
-          onPress={() => setSearchMode("normal")}
-          style={
-            searchMode === "normal"
-              ? styles.activeButton
-              : styles.inactiveButton
-          }
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginHorizontal: 50,
+            marginVertical: 170,
+          }}
         >
-          <Text style={styles.buttonText}>Normal Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setSearchMode("advanced")}
-          style={
-            searchMode === "advanced"
-              ? styles.activeButton
-              : styles.inactiveButton
-          }
-        >
-          <Text style={styles.buttonText}>Advanced Search</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => setSearchMode("normal")}
+            style={
+              searchMode === "normal"
+                ? styles.activeButton
+                : styles.inactiveButton
+            }
+          >
+            <Text style={styles.buttonText}>Normal Search</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setSearchMode("advanced")}
+            style={
+              searchMode === "advanced"
+                ? styles.activeButton
+                : styles.inactiveButton
+            }
+          >
+            <Text style={styles.buttonText}>Advanced Search</Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
       {searchMode === "normal" && (
         <View>
           <View
-            style={{ backgroundColor: COLORS.brown1, padding: 5,height:50,margin:20,borderRadius:10,justifyContent: 'space-between' ,flexDirection:'row',alignItems:'center'}}
+            style={{
+              backgroundColor: COLORS.brown1,
+              padding: 5,
+              height: 50,
+              margin: 20,
+              borderRadius: 10,
+              justifyContent: "space-between",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
             onPress={handleSearchByNearby}
           >
-            <Text style={{ color: 'white',marginLeft:10 }}>Search nearby Advocate</Text>
-            <TouchableOpacity onPress={handleSearchByNearby}><Text style={{ color: 'white',marginRight:10 }}>Search</Text></TouchableOpacity>
+            <Text style={{ color: "white", marginLeft: 10 }}>
+              Search nearby Advocate
+            </Text>
+            <TouchableOpacity onPress={handleSearchByNearby}>
+              <Text style={{ color: "white", marginRight: 10 }}>Search</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={{textAlign:'center'}}>OR</Text>
+          <Text style={{ textAlign: "center" }}>OR</Text>
           <View
             style={{
               marginBottom: 140,
               margin: 10,
-              alignItems:'center',
+              alignItems: "center",
               flexDirection: "row",
               justifyContent: "space-between",
             }}
@@ -381,16 +393,23 @@ const FindLawyerScreen = () => {
                 dropDownContainerStyle={{ width: "95%", height: "240%" }}
               />
             </View>
-            <View style={{ flex: 1, backgroundColor: COLORS.brown2 ,padding:5,borderRadius:5,margin:5}}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: COLORS.brown2,
+                padding: 5,
+                borderRadius: 5,
+                margin: 5,
+              }}
+            >
               <TextInput
                 style={styles.input}
                 placeholder="Enter City"
                 value={city}
-                placeholderTextColor='#fff'
+                placeholderTextColor="#fff"
                 onChangeText={setCity}
               />
             </View>
-
           </View>
 
           <TouchableOpacity
@@ -451,18 +470,16 @@ const FindLawyerScreen = () => {
               margin: 20,
               padding: 10,
               borderRadius: 4,
-              borderRadius:10,
-              height:50,
-              color: 'white', 
-              
-            
+              borderRadius: 10,
+              height: 50,
+              color: "white",
             }}
             placeholder={
               advancedSearchOption === "userName"
                 ? "Enter UserName"
                 : "Enter Name"
             }
-            placeholderTextColor="#fff" 
+            placeholderTextColor="#fff"
             value={searchText}
             onChangeText={setSearchText}
           />
@@ -485,43 +502,43 @@ const FindLawyerScreen = () => {
           />
         </View>
       )}
-        
-        <View>
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={openFilterModal}
-          >
-            <Text style={styles.filterButtonText}>Filter</Text>
-          </TouchableOpacity>
-          <Loader visible={isLoading} />
-          <FlatList
-            data={advocatesList}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  //navigate to AdvocatePage
-                 // console.log(navigate);
-                }}
-                style={{
-                  backgroundColor: COLORS.brown4,
-                  marginVertical: 5,
-                  padding: 10,
-                  borderRadius: 5,
-                
-                }}
-              >
-                <Text style={{ color: "#000" }}>User Name : 
-                  {item.personalDetails.userName}
-                </Text>
-                <Text style={{ color: "#000" }}>Name : 
-                  {item.personalDetails.name}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      
+
+      <View>
+        <TouchableOpacity style={styles.filterButton} onPress={openFilterModal}>
+          <Text style={styles.filterButtonText}>Filter</Text>
+        </TouchableOpacity>
+
+        <FlatList
+          data={advocatesList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => {
+                //navigate to AdvocatePage
+                // console.log(navigate);
+              }}
+              style={{
+                backgroundColor: COLORS.brown4,
+                marginVertical: 5,
+                padding: 10,
+                borderRadius: 5,
+              }}
+            >
+              <Image
+                source={{ uri: `data:image/png;base64,${item.personalDetails.image}` }}
+                style={{ width: 200, height: 200, resizeMode: "contain" }}
+              />
+
+              <Text style={{ color: "#000" }}>
+                User Name :{item.personalDetails.userName}
+              </Text>
+              <Text style={{ color: "#000" }}>
+                Name :{item.personalDetails.name}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
     </ScrollView>
   );
 };

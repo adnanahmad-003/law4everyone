@@ -57,14 +57,17 @@ const CharacterListItem = ({ character, isLiked, setIsLiked }) => {
 
 
   const image = `data:image/png;base64,${character.image}`;
-  const userImage = `data:image/png;base64,${character.advocates[0].personalDetails.profileImage}`;
+  const userImage = `data:image/png;base64,${character.advocates?.personalDetails.profileImage}`;
+  
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleNavigatetoAdvocate}>
-      <ProfileBar profileImage={userImage} profileName={character.advocates[0].personalDetails.userName} />
+      
+      <ProfileBar profileImage={image} profileName={character.advocates?.personalDetails.userName} />
       </TouchableOpacity>
-      <Text style={styles.name}></Text>
+      <Text style={styles.name}>{character.title}</Text>
+     
       <Image source={{ uri: image}} style={styles.image} />
       
         <CommentsLikesBar
@@ -74,7 +77,7 @@ const CharacterListItem = ({ character, isLiked, setIsLiked }) => {
           onLikePress={handleLikePress}
           onCommentsPress={handleCommentsPress}
         />
-        <View><Text style={styles.description}>description:  {character.description}</Text></View>
+        <View><Text style={styles.description}>{character.description}</Text></View>
     
     </View>
   );
@@ -96,10 +99,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   name: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 10,
-    marginTop: 10,
+    marginVertical:15,
+    marginLeft:19
   },
   description: {
     fontSize: 14,

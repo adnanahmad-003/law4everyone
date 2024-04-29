@@ -21,6 +21,7 @@ import Loader from './../../../../components/Loader';
 const BlogFeed = () => {
   const [skip, setSkip] = useState(0);
   const limit = 4;
+  const [isLoader,setIsLoader] = useState(false);
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState([]);
 
@@ -39,6 +40,7 @@ const BlogFeed = () => {
     console.log("Fetching: ");
 
     try {
+      
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
         `${BASE_URL}/user/getBlogs?skip=${skip}&limit=${limit}`,
@@ -52,7 +54,7 @@ const BlogFeed = () => {
       );
       const data = await response.json();
       console.log(data.message);
-     
+      
       if (data.blogs) {
         console.log(skip,'skip');
         setItems(existingItems => [...existingItems, ...data.blogs]);
@@ -109,6 +111,7 @@ const BlogFeed = () => {
   }
   return (
     <View style={{ flex: 1 ,backgroundColor:'#fff'}}>
+       <Loader visible={isLoader} />
       <FlatList
         data={items}
         renderItem={renderItem}

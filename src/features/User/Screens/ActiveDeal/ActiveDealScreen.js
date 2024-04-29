@@ -10,7 +10,7 @@ const ActiveDealScreen = ({ navigation }) => {
   const [queries, setQueries] = useState([]);
   //const queries = useSelector(state => state.deals.queries);
  //console.log(BASE_URL);
- const{isLoading,setIsLoading}=useState(false);
+ const[isLoading,setIsLoading]=useState(false);
   //Get request
   useEffect(() => {
     fetchData();

@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable ,Keyboard,Alert ,Image} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable ,Keyboard,Alert ,Image, ScrollView} from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/Input';
@@ -108,7 +108,7 @@ const Login = () => {
   
   
   return (
-    <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
+    <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
       <View style={{ marginTop: 10 }}>
         <Image
           source={require("../../../assets/Images/Warner.png")}
@@ -218,7 +218,7 @@ const Login = () => {
           <Text style={{ color: COLORS.brown4 }}>Click Here</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 

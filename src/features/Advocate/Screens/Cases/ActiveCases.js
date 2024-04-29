@@ -101,9 +101,7 @@ const ActiveCases = ({ navigation }) => {
       <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
       <Text style={{fontSize:15,fontWeight:'500'}}>{`User Name: ${problem.user.userName}    Name: ${problem.user.name}`}</Text>
 
-      <TouchableOpacity onPress={() => handleProfileView(problem.userId)} style={{backgroundColor:COLORS.brown1,padding:6,borderRadius:5}}>
-        <Text style={{color:'#fff'}}>View Full Profile</Text>
-      </TouchableOpacity>
+    
      
       </View>
       <Text style={styles.queryTitle}>{`Title :${problem.title}`}</Text>
@@ -112,9 +110,14 @@ const ActiveCases = ({ navigation }) => {
         Last Date: {new Date(problem.deadline).toDateString()}
       </Text>
       <Text style={styles.queryStatus}>Status: {problem.status}</Text>
-      <TouchableOpacity onPress={() => handleRequestCase(problem.userId,problem.problemId)} style={{backgroundColor:COLORS.brown1,padding:6,borderRadius:5,width:'30%',marginTop:9}}>
+      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',margin:10}}>
+      <TouchableOpacity onPress={() => handleRequestCase(problem.userId,problem.problemId)} style={{backgroundColor:COLORS.brown1,padding:6,borderRadius:5}}>
         <Text style={{color:'#fff'}}>make Request</Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleProfileView(problem.userId)} style={{backgroundColor:COLORS.brown1,padding:6,borderRadius:5}}>
+        <Text style={{color:'#fff'}}>View Full Profile</Text>
+      </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   ))}
 
@@ -128,6 +131,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
+    
   },
   title: {
     fontSize: 20,
@@ -139,6 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.brown4,
     padding: 20,
     borderRadius: 10,
+    marginBottom:20
   },
   queryTitle: {
     fontSize: 18,

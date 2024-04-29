@@ -4,10 +4,11 @@ import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native"; 
 import { BASE_URL } from "../../../../constants/Url";
 import Loader from "../../../../components/Loader";
+import COLORS from "../../../../constants/Color";
 const RequestedCases = ({ navigation }) => {
   const [queries, setQueries] = useState([]);
   const [userDetails , setUserDetails]= useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+ // const [isLoading, setIsLoading] = React.useState(false);
   useEffect(() => {
     fetchData();
   }, []);
@@ -19,7 +20,7 @@ const RequestedCases = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      isLoading(true);
+      
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(`${BASE_URL}/advocate/getRequestedProblems`, {
         method: "GET",
@@ -32,7 +33,7 @@ const RequestedCases = ({ navigation }) => {
       //console.log(data);
         setQueries(data.requestedProblems.problemDetails);
         setUserDetails(data.requestedProblems.userDetails);
-        isLoading(false);
+        
      
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -51,8 +52,8 @@ const RequestedCases = ({ navigation }) => {
       <Text style={styles.title}>Requested Cases</Text>
       {queries && queries.map((problem, index) => (
   <View key={problem._id} style={styles.queryContainer}>
-    <TouchableOpacity onPress={() => handleProfileView(userDetails[index].userId)} style={{backgroundColor:'gray'}}>
-      <Text>View User Profile</Text>
+    <TouchableOpacity onPress={() => handleProfileView(userDetails[index].userId)} style={{backgroundColor: COLORS.brown2,padding:5,borderRadius:5,width:'50%'}}>
+      <Text style={{margin:5}}>View User Profile</Text>
     </TouchableOpacity>
     <Text style={styles.queryTitle}>{problem.title}</Text>
     <Text style={styles.queryDetails}>{problem.description}</Text>
@@ -62,7 +63,7 @@ const RequestedCases = ({ navigation }) => {
     <Text style={styles.queryStatus}>Status: {problem.status}</Text>
   </View>
 ))}
-  <Loader visible={isLoading} />
+ 
     </ScrollView>
   );
 };

@@ -6,7 +6,7 @@ import { BASE_URL } from '../../../../constants/Url';
 import Loader from '../../../../components/Loader';
 const HomeScreen = () => {
   const [accountDetails, setAccountDetails] = useState({});
-  const{isLoading,setIsLoading}=useState(false);
+  const[isLoading,setIsLoading]=useState(false);
   useEffect(() => {
     fetchData();
   }, []);
@@ -29,15 +29,15 @@ const HomeScreen = () => {
         },
       });
       const data = await response.json();
-
+      setIsLoading(false);
       console.log(data.message);
       setAccountDetails(data.user);
-      setIsLoading(false);
+      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  const image = `data:image/png;base64,${accountDetails.profileImage}`;
+  const image = `data:image/png;base64,${accountDetails?.profileImage}`;
   return (
     <View style={styles.container}>
 

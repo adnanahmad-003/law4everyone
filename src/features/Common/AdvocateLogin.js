@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,Image, Pressable ,Keyboard,Alert} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,Image, Pressable ,Keyboard,Alert, ScrollView} from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/Input';
@@ -9,7 +9,7 @@ import {BASE_URL} from './../../constants/Url';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserData } from '../../../Redux/action';
 import COLORS from '../../constants/Color';
-
+import Loader from './../../components/Loader';
 const AdvocateLogin = () => {
   const userData = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ const AdvocateLogin = () => {
     message:'',
     isSignedIn:false
   });
+  const [isLoading, setIsLoading] = React.useState(false);
   const navigation = useNavigation();
   const [isUser, setUser] = useState(false);
   const [inputs, setInputs] = React.useState({
@@ -39,12 +40,13 @@ const AdvocateLogin = () => {
     }
     if (isValid) {
       login();
+
     }
   };
 
   const login= async () => { 
     try {
-      //setLoading(false);
+      setIsLoading(true);
       const apiUrl = `${BASE_URL}/advocate/signin`;
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -57,7 +59,7 @@ const AdvocateLogin = () => {
       });
       
       const jsonData = await response.json();
-      
+      setIsLoading(false);
        console.log(jsonData,'login')
        setResponse({message:jsonData.message,isSignedIn:jsonData.isSignedIn})
       if(jsonData.isSignedIn){
@@ -105,7 +107,7 @@ const AdvocateLogin = () => {
   
   
   return (
-    <SafeAreaView style={{backgroundColor:"white",flex:1}} >
+    <ScrollView style={{backgroundColor:"white",flex:1}} >
     
      <View style={{marginTop:20}}>
      <Image
@@ -204,7 +206,7 @@ const AdvocateLogin = () => {
           
       
       </View>
-      
+      <Loader visible={isLoading} />
      </View>
      <View
         style={{
@@ -213,6 +215,7 @@ const AdvocateLogin = () => {
           marginTop: 12,
         }}
       >
+        
         <Text style={{ fontSize: 15, color: COLORS.brown2 }}>
           Create new account{" "}
         </Text>
@@ -220,7 +223,7 @@ const AdvocateLogin = () => {
           <Text style={{ color: COLORS.brown4 }}>Click Here</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   )
 }
 
