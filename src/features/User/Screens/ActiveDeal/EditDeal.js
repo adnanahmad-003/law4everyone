@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { BASE_URL } from '../../../../constants/Url';
 //import { useDispatch, useSelector } from 'react-redux';
 //import { updateQuery } from '../../../../Redux/action';
 import { updateCaseAPI } from './Modal/Modal';

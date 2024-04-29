@@ -1,12 +1,12 @@
 // api.js
 import * as SecureStore from 'expo-secure-store';
-
+import { BASE_URL } from '../../../../../constants/Url';
 // api for chat post
 export const addStringAPI = async (newString) => {
     try {
         const token= await SecureStore.getItemAsync('authToken');
       // console.log(token);
-        const response = await fetch(`http://localhost:3000/lawbot/getResponse`, {
+        const response = await fetch(`${BASE_URL}/lawbot/getResponse`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

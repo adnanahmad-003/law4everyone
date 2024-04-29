@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet,Text} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import { BASE_URL } from '../../../../constants/Url';
 //redux
 import { addCaseAPI } from './Modal/Modal';
 import { useDispatch } from 'react-redux'; 
@@ -47,46 +47,45 @@ const AddDeal = ({navigation}) => {
   
     return (
       <View style={styles.container}>
-          <DropDownPicker
-                        open={open}
-                        value={status}
-                        items={items}
-                        setOpen={setOpen}
-                        setValue={setStatus}
-                        setItems={setItems}
-                        placeholder="Deal Status"
-                        style={{ width: "60%" }}
-                        dropDownContainerStyle={{ width: '60%', }}
-                    />
-        <TextInput
-          style={styles.input}
-          placeholder="Query Title"
-          value={queryTitle}
-          onChangeText={setQueryTitle}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Query Details"
-          multiline
-          numberOfLines={4}
-          value={queryDetails}
-          onChangeText={setQueryDetails}
-        />
-  
-          <DateTimePicker
-            value={lastDate}
-            mode="date"
-            display="default"
-            onChange={(event,selectedDate) => {
-              
-              if (selectedDate) {
-                setLastDate(selectedDate);
-              }
-            }}
-          />
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-        <Button title="Save Query" onPress={handleSaveQuery} />
-      </View>
+      <DropDownPicker
+        open={open}
+        value={status}
+        items={items}
+        setOpen={setOpen}
+        setValue={setStatus}
+        setItems={setItems}
+        placeholder="Deal Status"
+        style={styles.dropDown}
+        dropDownContainerStyle={styles.dropDownContainer}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Query Title"
+        value={queryTitle}
+        onChangeText={setQueryTitle}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Query Details"
+        multiline
+        numberOfLines={4}
+        value={queryDetails}
+        onChangeText={setQueryDetails}
+      />
+      <DateTimePicker
+        value={lastDate}
+        mode="date"
+        display="default"
+        onChange={(event, selectedDate) => {
+          if (selectedDate) {
+            setLastDate(selectedDate);
+          }
+        }}
+        style={styles.datePicker}
+      />
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+      <Button title="Save Query" onPress={handleSaveQuery} />
+    </View>
     );
   };
   
@@ -94,11 +93,9 @@ const AddDeal = ({navigation}) => {
     container: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
       padding: 20,
     },
     input: {
-      width: '100%',
       height: 40,
       borderColor: 'gray',
       borderWidth: 1,
@@ -106,12 +103,19 @@ const AddDeal = ({navigation}) => {
       paddingHorizontal: 10,
     },
     datePicker: {
+      marginBottom: 20,
+    },
+    dropDown: {
       width: '100%',
       marginBottom: 20,
+    },
+    dropDownContainer: {
+      width: '100%',
     },
     error: {
       color: 'red',
       marginBottom: 10,
+      marginLeft:'30%'
     },
   });
 export default AddDeal

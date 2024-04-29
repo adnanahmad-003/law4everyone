@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable ,Keyboard,Alert ,Image} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View,TextInput,TouchableOpacity,ImageBackground, Pressable ,Keyboard,Alert ,Image, ScrollView} from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/Input';
@@ -8,7 +8,8 @@ import * as SecureStore from 'expo-secure-store';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserData } from '../../../Redux/action';
 import COLORS from '../../constants/Color';
-
+import { BASE_URL } from '../../constants/Url';
+import Loader from './../../components/Loader';
 const Login = () => {
   const userData = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const Login = () => {
     email: '',
    password: ''});
   const [errors, setErrors] = React.useState({});
-  //const [loading, setLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   
   const validate = async () => {
     Keyboard.dismiss();
@@ -40,13 +41,14 @@ const Login = () => {
     }
     if (isValid) {
       login();
+      setIsLoading(true);
     }
   };
 
   const login= async () => { 
     try {
-      //setLoading(false);
-      const apiUrl = 'http://localhost:3000/user/signin';
+      
+      const apiUrl = `${BASE_URL}/user/signin`;
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -58,7 +60,7 @@ const Login = () => {
       });
       
       const jsonData = await response.json();
-      
+      setIsLoading(false);
        console.log(jsonData,'login')
        setResponse({message:jsonData.message,isSignedIn:jsonData.isSignedIn})
       if(jsonData.isSignedIn){
@@ -106,7 +108,7 @@ const Login = () => {
   
   
   return (
-    <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
+    <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
       <View style={{ marginTop: 10 }}>
         <Image
           source={require("../../../assets/Images/Warner.png")}
@@ -200,6 +202,7 @@ const Login = () => {
           />
           <Button title="Log In" onPress={validate} />
         </View>
+        <Loader visible={isLoading} />
       </View>
       <View
         style={{
@@ -215,7 +218,7 @@ const Login = () => {
           <Text style={{ color: COLORS.brown4 }}>Click Here</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 

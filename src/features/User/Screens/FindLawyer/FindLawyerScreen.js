@@ -10,12 +10,14 @@ import {
   ScrollView,
   ImageBackground
 } from "react-native";
+import Loader from "../../../../components/Loader";
 import React, { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import COLORS from "../../../../constants/Color";
 import { EvilIcons } from "@expo/vector-icons";
 import * as SecureStore from "expo-secure-store";
 import { Entypo } from "@expo/vector-icons";
+import {BASE_URL} from './../../../../constants/Url';
 const FilterModal = ({
   isOpen,
   onClose,
@@ -77,6 +79,7 @@ const FilterModal = ({
   );
 };
 const FindLawyerScreen = () => {
+  const[isLoading,setIsLoading]=useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchMode, setSearchMode] = useState("normal");
   const [advancedSearchOption, setAdvancedSearchOption] = useState("userName");
@@ -111,9 +114,10 @@ const FindLawyerScreen = () => {
 
   const searchNeabyAdvicate = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/nearbyAdvocates`,
+        `${BASE_URL}/user/nearbyAdvocates`,
         {
           method: "GET",
           headers: {
@@ -123,7 +127,7 @@ const FindLawyerScreen = () => {
         }
       );
       const data = await response.json();
-
+      setIsLoading(false);
       console.log(data);
       setAdvocatesList(data.nearbyAdvocates);
       console.log(advocatesList);
@@ -180,13 +184,14 @@ const FindLawyerScreen = () => {
   ]);
   const handleFilter = async () => {
     try {
+      setIsLoading(true);
       //const advocatesIds = advocatesList.map(advocate => advocate.id);
       const advocatesIds = advocatesList.map(advocate => ({ advocateId: advocate.advocateId }));
 
       const token = await SecureStore.getItemAsync("authToken");
      // console.log(advocatesIds);
       const response = await fetch(
-        `http://localhost:3000/user/filterByAreasOfExpertise`,
+        `${BASE_URL}/user/filterByAreasOfExpertise`,
         {
           method: "POST",
           headers: {
@@ -198,7 +203,7 @@ const FindLawyerScreen = () => {
       );
 
       const data = await response.json();
-
+      setIsLoading(false);
       //console.log(data,'filtered');
       setAdvocatesList(data.filteredAdvocates);
     } catch (error) {
@@ -210,9 +215,10 @@ const FindLawyerScreen = () => {
 
   const searchCityState = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/searchByLocation`,
+        `${BASE_URL}/user/searchByLocation`,
         {
           method: "POST",
           headers: {
@@ -224,7 +230,7 @@ const FindLawyerScreen = () => {
       );
 
       const data = await response.json();
-
+      setIsLoading(false);
       console.log(data);
       setAdvocatesList(data.nearbyAdvocates);
     } catch (error) {
@@ -239,9 +245,10 @@ const FindLawyerScreen = () => {
 
   const searchByUserName = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/searchAdvocateByUserName`,
+        `${BASE_URL}/user/searchAdvocateByUserName`,
         {
           method: "POST",
           headers: {
@@ -253,8 +260,8 @@ const FindLawyerScreen = () => {
       );
 
       const data = await response.json();
-
-      console.log(data);
+      setIsLoading(false);
+     // console.log(data);
       setAdvocatesList(data.advocate);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -263,9 +270,10 @@ const FindLawyerScreen = () => {
   //personalDetails.userName , name ,profileImage
   const searchByName = async () => {
     try {
+      setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
-        `http://localhost:3000/user/searchAdvocateByName`,
+        `${BASE_URL}/user/searchAdvocateByName`,
         {
           method: "POST",
           headers: {
@@ -277,7 +285,7 @@ const FindLawyerScreen = () => {
       );
 
       const data = await response.json();
-
+      setIsLoading(false);
       console.log(data);
       setAdvocatesList(data.advocate);
     } catch (error) {
@@ -304,58 +312,70 @@ const FindLawyerScreen = () => {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor:'#fff' }}>
-       <ImageBackground
-        source={require("./../../../../../assets/Images/hero.png")} 
-        style={{ height: 400,alignSelf:'center',width:500}}
-        resizeMode='cover'
+    <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <ImageBackground
+        source={require("./../../../../../assets/Images/hero.png")}
+        style={{ height: 400, alignSelf: "center", width: 500 }}
+        resizeMode="cover"
       >
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginHorizontal: 50,
-          marginVertical:170
-        }}
-      >
-        
-        <TouchableOpacity
-          onPress={() => setSearchMode("normal")}
-          style={
-            searchMode === "normal"
-              ? styles.activeButton
-              : styles.inactiveButton
-          }
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginHorizontal: 50,
+            marginVertical: 170,
+          }}
         >
-          <Text style={styles.buttonText}>Normal Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setSearchMode("advanced")}
-          style={
-            searchMode === "advanced"
-              ? styles.activeButton
-              : styles.inactiveButton
-          }
-        >
-          <Text style={styles.buttonText}>Advanced Search</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => setSearchMode("normal")}
+            style={
+              searchMode === "normal"
+                ? styles.activeButton
+                : styles.inactiveButton
+            }
+          >
+            <Text style={styles.buttonText}>Normal Search</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setSearchMode("advanced")}
+            style={
+              searchMode === "advanced"
+                ? styles.activeButton
+                : styles.inactiveButton
+            }
+          >
+            <Text style={styles.buttonText}>Advanced Search</Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
       {searchMode === "normal" && (
         <View>
           <View
-            style={{ backgroundColor: COLORS.brown1, padding: 5,height:50,margin:20,borderRadius:10,justifyContent: 'space-between' ,flexDirection:'row',alignItems:'center'}}
+            style={{
+              backgroundColor: COLORS.brown1,
+              padding: 5,
+              height: 50,
+              margin: 20,
+              borderRadius: 10,
+              justifyContent: "space-between",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
             onPress={handleSearchByNearby}
           >
-            <Text style={{ color: 'white',marginLeft:10 }}>Search nearby Advocate</Text>
-            <TouchableOpacity onPress={handleSearchByNearby}><Text style={{ color: 'white',marginRight:10 }}>Search</Text></TouchableOpacity>
+            <Text style={{ color: "white", marginLeft: 10 }}>
+              Search nearby Advocate
+            </Text>
+            <TouchableOpacity onPress={handleSearchByNearby}>
+              <Text style={{ color: "white", marginRight: 10 }}>Search</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={{textAlign:'center'}}>OR</Text>
+          <Text style={{ textAlign: "center" }}>OR</Text>
           <View
             style={{
               marginBottom: 140,
               margin: 10,
-              alignItems:'center',
+              alignItems: "center",
               flexDirection: "row",
               justifyContent: "space-between",
             }}
@@ -373,16 +393,23 @@ const FindLawyerScreen = () => {
                 dropDownContainerStyle={{ width: "95%", height: "240%" }}
               />
             </View>
-            <View style={{ flex: 1, backgroundColor: COLORS.brown2 ,padding:5,borderRadius:5,margin:5}}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: COLORS.brown2,
+                padding: 5,
+                borderRadius: 5,
+                margin: 5,
+              }}
+            >
               <TextInput
                 style={styles.input}
                 placeholder="Enter City"
                 value={city}
-                placeholderTextColor='#fff'
+                placeholderTextColor="#fff"
                 onChangeText={setCity}
               />
             </View>
-
           </View>
 
           <TouchableOpacity
@@ -443,18 +470,16 @@ const FindLawyerScreen = () => {
               margin: 20,
               padding: 10,
               borderRadius: 4,
-              borderRadius:10,
-              height:50,
-              color: 'white', 
-              
-            
+              borderRadius: 10,
+              height: 50,
+              color: "white",
             }}
             placeholder={
               advancedSearchOption === "userName"
                 ? "Enter UserName"
                 : "Enter Name"
             }
-            placeholderTextColor="#fff" 
+            placeholderTextColor="#fff"
             value={searchText}
             onChangeText={setSearchText}
           />
@@ -477,42 +502,43 @@ const FindLawyerScreen = () => {
           />
         </View>
       )}
-      
-        <View>
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={openFilterModal}
-          >
-            <Text style={styles.filterButtonText}>Filter</Text>
-          </TouchableOpacity>
-          <FlatList
-            data={advocatesList}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  //navigate to AdvocatePage
-                  console.log(navigate);
-                }}
-                style={{
-                  backgroundColor: COLORS.brown4,
-                  marginVertical: 5,
-                  padding: 10,
-                  borderRadius: 5,
-                
-                }}
-              >
-                <Text style={{ color: "#000" }}>
-                  {item.personalDetails.userName}
-                </Text>
-                <Text style={{ color: "#000" }}>
-                  {item.personalDetails.name}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      
+
+      <View>
+        <TouchableOpacity style={styles.filterButton} onPress={openFilterModal}>
+          <Text style={styles.filterButtonText}>Filter</Text>
+        </TouchableOpacity>
+
+        <FlatList
+          data={advocatesList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => {
+                //navigate to AdvocatePage
+                // console.log(navigate);
+              }}
+              style={{
+                backgroundColor: COLORS.brown4,
+                marginVertical: 5,
+                padding: 10,
+                borderRadius: 5,
+              }}
+            >
+              <Image
+                source={{ uri: `data:image/png;base64,${item.personalDetails.image}` }}
+                style={{ width: 200, height: 200, resizeMode: "contain" }}
+              />
+
+              <Text style={{ color: "#000" }}>
+                User Name :{item.personalDetails.userName}
+              </Text>
+              <Text style={{ color: "#000" }}>
+                Name :{item.personalDetails.name}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
     </ScrollView>
   );
 };

@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Keyboa
 import React, { useState, useRef, useEffect } from 'react'
 //import DropDownPicker from 'react-native-dropdown-picker';
 import COLORS from '../../../../constants/Color';
+import { BASE_URL } from '../../../../constants/Url';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import * as SecureStore from 'expo-secure-store';
@@ -16,9 +17,9 @@ import {
     IOSOutputFormat,
     Recording,
   } from 'expo-av/build/Audio';
-
+import Loader from '../../../../components/Loader';
 const LawQuery = () => {
-
+    const{isLoading,setIsLoading}=useState(false);
     const [play, setPlay] = useState(false);
     // redux 
     //const response = 'ans'
@@ -30,9 +31,11 @@ const LawQuery = () => {
     const handleAddString = async () => {
         if (newString) {
             try {
+                setIsLoading(true);
                 const response = await addStringAPI(newString);
                 //console.log(response);
                 setNewResponse(response);
+                setIsLoading(false);
                 dispatch(addString(newString, response));
                 setNewString('');
                 setNewResponse('');
@@ -111,6 +114,7 @@ const LawQuery = () => {
     //api call for recording
     async function uploadRecording() {
         try {
+            setIsLoading(true);
             const token = await SecureStore.getItemAsync('authToken');
             const uri = recording.getURI();
             //console.log(uri,'1234')
@@ -120,8 +124,9 @@ const LawQuery = () => {
                 type: 'audio/mp4', // Adjust the type according to your audio format
                 name: 'audioPrompt', // Adjust the name as needed
             });
-            // Make the POST request
-            const response = await fetch('http://localhost:3000/lawbot/convertAudio', {
+            formData.append('chatId', '1');
+
+            const response = await fetch(`${BASE_URL}/lawbot/convertAudio`, {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -130,7 +135,7 @@ const LawQuery = () => {
 
                 },
             });
-
+            setIsLoading(false);
             const data = await response.json();
             console.log(data)
             console.log(data.message)
@@ -182,96 +187,138 @@ const LawQuery = () => {
     // console.log(recording)
 
     return (
+      <SafeAreaView style={{ marginTop: 10, flex: 1 }}>
+        <View
+          style={{
+            backgroundColor: COLORS.brown2,
+            padding: 8,
+            marginHorizontal: 6,
+            borderRadius: 8,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontSize: 18,
+                fontWeight: "600",
+                marginRight: 10,
+              }}
+            >
+              Ask your question
+            </Text>
+          </View>
+        </View>
+        <View style={{}}>
+          <ScrollView
+            style={{ marginBottom: 150 }}
+            ref={scrollViewRef}
+            onContentSizeChange={() => {
+              if (scrollViewRef.current) {
+                scrollViewRef.current.scrollToEnd({ animated: true });
+              }
+            }}
+          >
+            {strings.strings.map((item) => (
+              <RenderItem key={item.id} item={item} />
+            ))}
 
-        < SafeAreaView style={{ marginTop: 10, flex: 1 }}>
-
-            <View style={{ backgroundColor: COLORS.brown2, padding: 8, marginHorizontal: 6, borderRadius: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-
-                <View><Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", marginRight: 10 }}>Ask your question</Text></View>
-            </View>
-            <View style={{}}>
-
-                <ScrollView style={{ marginBottom: 150 }}
-                    ref={scrollViewRef}
-                    onContentSizeChange={() => {
-                        if (scrollViewRef.current) {
-                            scrollViewRef.current.scrollToEnd({ animated: true });
-                        }
-                    }}
-                >
-                    {strings.strings.map((item) => (
-                        <RenderItem key={item.id} item={item} />
-                    ))}
-
-                    {sound && (
-                        <View style={{ flexDirection: "row", marginLeft: "45%" }}>
-                            <TouchableOpacity onPress={playRecording} style={{ backgroundColor: COLORS.brown1, margin: 3, padding: 8, borderRadius: 13, width: "40%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <AntDesign name="play" size={24} color={play ? '#fff' : COLORS.brown4} />
-                                <Text style={{ color: COLORS.white }}>Play</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={stopPlayback} style={{ backgroundColor: COLORS.brown1, margin: 3, padding: 8, borderRadius: 13, width: "40%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <AntDesign name="pausecircle" size={24} color={play ? COLORS.brown4 : '#fff'} />
-                                <Text style={{ color: COLORS.white }}>Stop</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-
-
-                </ScrollView>
-            </View>
-
-
-
-            <View style={{
-                flex: 1,
-                height: 100,
-                flexDirection: "row",
-                alignItems: "center",
-                position: "absolute",
-                bottom: 0,
-
-            }}>
-
+            {sound && (
+              <View style={{ flexDirection: "row", marginLeft: "45%" }}>
                 <TouchableOpacity
-                    onPress={recording ? stopRecording : startRecording}
-                    style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        backgroundColor: recording ? COLORS.red : COLORS.brown4,
-
-
-                    }} >
-                    <FontAwesome6 name="microphone" size={22} color="white" />
-
+                  onPress={playRecording}
+                  style={{
+                    backgroundColor: COLORS.brown1,
+                    margin: 3,
+                    padding: 8,
+                    borderRadius: 13,
+                    width: "40%",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <AntDesign
+                    name="play"
+                    size={24}
+                    color={play ? "#fff" : COLORS.brown4}
+                  />
+                  <Text style={{ color: COLORS.white }}>Play</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={stopPlayback}
+                  style={{
+                    backgroundColor: COLORS.brown1,
+                    margin: 3,
+                    padding: 8,
+                    borderRadius: 13,
+                    width: "40%",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <AntDesign
+                    name="pausecircle"
+                    size={24}
+                    color={play ? COLORS.brown4 : "#fff"}
+                  />
+                  <Text style={{ color: COLORS.white }}>Stop</Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
+            <Loader visible={isLoading} />
+          </ScrollView>
+        </View>
 
-                <View style={{ width: "79%", marginHorizontal: 5 }}>
+        <View
+          style={{
+            flex: 1,
+            height: 100,
+            flexDirection: "row",
+            alignItems: "center",
+            position: "absolute",
+            bottom: 0,
+          }}
+        >
+          <TouchableOpacity
+            onPress={recording ? stopRecording : startRecording}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: recording ? COLORS.red : COLORS.brown4,
+            }}
+          >
+            <FontAwesome6 name="microphone" size={22} color="white" />
+          </TouchableOpacity>
 
-
-                    <TextInput
-
-                        style={{ backgroundColor: "white", padding: 8, borderRadius: 8, height: 45 }}
-                        value={newString}
-                        onChangeText={setNewString}
-                        placeholder="Enter a new string"
-                        onSubmitEditing={Keyboard.dismiss}
-
-                    />
-
-
-
-                </View>
-                <TouchableOpacity style={{ width: 30, height: 30 }}><Button title="+" onPress={handleAddString} /></TouchableOpacity>
-            </View>
-
-        </SafeAreaView>
-
-
-    )
+          <View style={{ width: "79%", marginHorizontal: 5 }}>
+            <TextInput
+              style={{
+                backgroundColor: "white",
+                padding: 8,
+                borderRadius: 8,
+                height: 45,
+              }}
+              value={newString}
+              onChangeText={setNewString}
+              placeholder="Enter a new string"
+              onSubmitEditing={Keyboard.dismiss}
+            />
+          </View>
+          <TouchableOpacity style={{ width: 30, height: 30 }}>
+            <Button title="+" onPress={handleAddString} />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
 }
 
 export default LawQuery

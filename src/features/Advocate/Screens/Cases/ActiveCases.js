@@ -6,6 +6,7 @@ import COLORS from './../../../../constants/Color';
 
 //import { useDispatch, useSelector } from 'react-redux';
 //import { addAdvocateId } from '../../../../../Redux/action';
+import { BASE_URL } from "../../../../constants/Url";
 const ActiveCases = ({ navigation }) => {
   //const dispatch = useDispatch();
   // const advocateId = useSelector((state) => state.advocateId);
@@ -28,7 +29,7 @@ const ActiveCases = ({ navigation }) => {
     try {
       setIsLoading(true);
       const token = await SecureStore.getItemAsync("authToken");
-      const response = await fetch(`http://localhost:3000/advocate/getProblems?limit=${limit}&skip=${skip}`, {
+      const response = await fetch(`${BASE_URL}/advocate/getProblems?limit=${limit}&skip=${skip}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +59,7 @@ const ActiveCases = ({ navigation }) => {
     try {
       const token = await SecureStore.getItemAsync("authToken");
       //console.log(userId,'UserId');
-      const response = await fetch("http://localhost:3000/advocate/sendCaseAcceptRequest", {
+      const response = await fetch(`${BASE_URL}/advocate/sendCaseAcceptRequest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,20 +98,26 @@ const ActiveCases = ({ navigation }) => {
       key={problem._id} 
       style={styles.queryContainer}
     >
-      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',margin:10}}>
-      <TouchableOpacity onPress={() => handleProfileView(problem.userId)} style={{backgroundColor:COLORS.brown1,padding:6,borderRadius:5}}>
-        <Text>View User Profile</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleRequestCase(problem.userId,problem.problemId)} style={{backgroundColor:COLORS.brown1,padding:6,borderRadius:5}}>
-        <Text>make Request</Text>
-      </TouchableOpacity>
+      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+      <Text style={{fontSize:15,fontWeight:'500'}}>{`User Name: ${problem.user.userName}    Name: ${problem.user.name}`}</Text>
+
+    
+     
       </View>
-      <Text style={styles.queryTitle}>{problem.title}</Text>
-      <Text style={styles.queryDetails}>{problem.description}</Text>
+      <Text style={styles.queryTitle}>{`Title :${problem.title}`}</Text>
+      <Text style={styles.queryDetails}>Details: {problem.description}</Text>
       <Text style={styles.queryLastDate}>
         Last Date: {new Date(problem.deadline).toDateString()}
       </Text>
       <Text style={styles.queryStatus}>Status: {problem.status}</Text>
+      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',margin:10}}>
+      <TouchableOpacity onPress={() => handleRequestCase(problem.userId,problem.problemId)} style={{backgroundColor:COLORS.brown1,padding:6,borderRadius:5}}>
+        <Text style={{color:'#fff'}}>make Request</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleProfileView(problem.userId)} style={{backgroundColor:COLORS.brown1,padding:6,borderRadius:5}}>
+        <Text style={{color:'#fff'}}>View Full Profile</Text>
+      </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   ))}
 
@@ -124,6 +131,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
+    
   },
   title: {
     fontSize: 20,
@@ -132,9 +140,10 @@ const styles = StyleSheet.create({
   },
   queryContainer: {
     margin: 5,
-    backgroundColor: "#fefefe",
+    backgroundColor: COLORS.brown4,
     padding: 20,
     borderRadius: 10,
+    marginBottom:20
   },
   queryTitle: {
     fontSize: 18,

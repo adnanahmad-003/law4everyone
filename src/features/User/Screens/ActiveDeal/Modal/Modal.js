@@ -1,12 +1,12 @@
 // api.js
 import * as SecureStore from 'expo-secure-store';
-
+import {BASE_URL} from './../../../../../constants/Url'
 // api for Case post
 export const addCaseAPI = async (postData) => {
     try {
         const token= await SecureStore.getItemAsync('authToken');
        //console.log(token);
-        const response = await fetch(`http://localhost:3000/user/postProblem`, {
+        const response = await fetch(`${BASE_URL}/user/postProblem`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export const updateCaseAPI = async (postData) => {
         const token= await SecureStore.getItemAsync('authToken');
        //console.log(token);
        const id = postData.queryId;
-        const response = await fetch(`http://localhost:3000/user/editProblem/${id}`, {
+        const response = await fetch(`${BASE_URL}/user/editProblem/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

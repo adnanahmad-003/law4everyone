@@ -172,7 +172,7 @@ const Signup = () => {
                 fontSize: 31,
                 textAlign: "center",
                 fontWeight: "600",
-                color: "white",
+                color: COLORS.brown1,
               }}
             >
               SignUp
@@ -188,6 +188,7 @@ const Signup = () => {
                 label="Email"
                 placeholder="Enter your email address"
                 error={errors.email}
+                placeholderTextColor="white" 
               />
 
               <Input
@@ -197,6 +198,7 @@ const Signup = () => {
                 label="Full Name"
                 placeholder="Enter your full name"
                 error={errors.fullname}
+                placeholderTextColor="white" 
               />
 
               <Input
@@ -207,6 +209,7 @@ const Signup = () => {
                 label="Phone Number"
                 placeholder="Enter your phone no"
                 error={errors.phone}
+                placeholderTextColor="white" 
               />
 
               <Input
@@ -216,6 +219,7 @@ const Signup = () => {
                 label="Password"
                 placeholder="Enter your password"
                 error={errors.password}
+                placeholderTextColor="white" 
                 password
               />
               <View>
@@ -224,7 +228,7 @@ const Signup = () => {
                     
                       marginVertical: 5,
                       fontSize: 16,
-                      color: COLORS.purple,
+                      color: COLORS.brown1 ,
                     
                   }}
                 >
@@ -237,6 +241,7 @@ const Signup = () => {
                   label="State"
                   placeholder="Enter your state"
                   error={errors.fullname}
+                  placeholderTextColor="white" 
                 />
                 <Input
                   onChangeText={(text) => handleOnchange(text, "city")}
@@ -245,6 +250,8 @@ const Signup = () => {
                   label="City"
                   placeholder="Enter your City"
                   error={errors.fullname}
+                  placeholderTextColor="white" 
+                  
                 />
                 <Input
                   keyboardType="numeric"
@@ -254,6 +261,7 @@ const Signup = () => {
                   label="Pincode"
                   placeholder="Enter your Pincode"
                   error={errors.phone}
+                  placeholderTextColor="white" 
                 />
               </View>
             </View>
@@ -266,11 +274,11 @@ const Signup = () => {
               marginTop: 12,
             }}
           >
-            <Text style={{ fontSize: 15, color: "white" }}>
+            <Text style={{ fontSize: 15, color: COLORS.brown1 }}>
               Already have a account{" "}
             </Text>
             <Pressable onPress={() => navigation.goBack()}>
-              <Text style={{ color: "#7727C8" }}>Login</Text>
+              <Text style={{ color: COLORS.brown4 }}>Login</Text>
             </Pressable>
           </View>
         </ImageBackground>

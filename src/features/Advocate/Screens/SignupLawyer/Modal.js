@@ -1,5 +1,6 @@
 
 //// api for Account
+import { BASE_URL } from "../../../../constants/Url";
 export const AdvocateSignup = async (accountDetails, uri1, uri2) => {
     try {
       
@@ -30,7 +31,7 @@ export const AdvocateSignup = async (accountDetails, uri1, uri2) => {
         formData.append('address', accountDetails.address);
         formData.append('nameOfUniversity', accountDetails.nameOfUniversity);
         
-        const response = await fetch(`http://localhost:3000/advocate/signup`, {
+        const response = await fetch(`${BASE_URL}/advocate/signup`, {
             method: 'POST',
             headers: {
                 // Don't set Content-Type, it will be set automatically by FormData
