@@ -43,7 +43,7 @@ const NotificationUser = () => {
           console.error("Error fetching data:", error);
         }
       };
-      const handleCaseAccept = async(advocateId,status)=>{
+      const handleCaseAccept = async(advocateId,problemId,responseId,status)=>{
         try {
             console.log(advocateId);
             const token = await SecureStore.getItemAsync("authToken");
@@ -54,6 +54,8 @@ const NotificationUser = () => {
                 Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify({
+                problemId:'486a50e4-278e-4c30-a5c9-e953b2a05f33',
+                notificationId:responseId,
                 advocateId: advocateId,
                 requestResponse: status
               })
@@ -97,7 +99,7 @@ const NotificationUser = () => {
                   { backgroundColor: COLORS.brown4, marginRight: 7 },
                 ]}
                 onPress={() =>
-                  handleCaseAccept(problem.advocateInfo?.advocateId, true)
+                  handleCaseAccept(problem.advocateInfo?.advocateId,problem?._id,problem?.problemId, true)
                 }
               >
                 <Text style={styles.buttonText}>Accept</Text>
@@ -105,7 +107,7 @@ const NotificationUser = () => {
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: COLORS.brown1 }]}
                 onPress={() =>
-                  handleCaseAccept(problem.advocateInfo?.advocateId, false)
+                  handleCaseAccept(problem.advocateInfo?.advocateId,problem?._id,problem?.problemId, false)
                 }
               >
                 <Text style={styles.buttonText}>Decline</Text>

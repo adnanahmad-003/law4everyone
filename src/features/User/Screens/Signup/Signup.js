@@ -162,10 +162,7 @@ const Signup = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
         <Loader visible={loading} />
-        <ImageBackground
-          source={require("../../../../../assets/Images/Login.jpg")}
-          style={{ height: 1200 }}
-        >
+       
           <View style={{ marginTop: 80, marginHorizontal: 20 }}>
             <Text
               style={{
@@ -281,7 +278,7 @@ const Signup = () => {
               <Text style={{ color: COLORS.brown4 }}>Login</Text>
             </Pressable>
           </View>
-        </ImageBackground>
+       
       </ScrollView>
     </SafeAreaView>
   );

@@ -524,10 +524,7 @@ const FindLawyerScreen = () => {
                 borderRadius: 5,
               }}
             >
-              <Image
-                source={{ uri: `data:image/png;base64,${item.personalDetails.image}` }}
-                style={{ width: 200, height: 200, resizeMode: "contain" }}
-              />
+            
 
               <Text style={{ color: "#000" }}>
                 User Name :{item.personalDetails.userName}
