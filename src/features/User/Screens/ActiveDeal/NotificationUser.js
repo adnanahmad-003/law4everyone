@@ -1,19 +1,26 @@
-import React, { useState, useEffect} from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView,Image } from "react-native";
-import io from 'socket.io-client';
-import {BASE_URL} from './../../../../constants/Url'
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from "react-native";
+import io from "socket.io-client";
+import { BASE_URL } from "./../../../../constants/Url";
 import COLORS from "../../../../constants/Color";
 import * as SecureStore from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native";
 import Loader from "../../../../components/Loader";
+import { Alert } from "react-native";
 const NotificationUser = () => {
-    const [notification, setNotification] = useState([]);
-    const[advocate,setAdvocates]=useState([]);
-    const [accept,setAccept]=useState(false);
-    const[isLoading,setIsLoading]=useState(false);
+  const [notification, setNotification] = useState([]);
+  const [advocate, setAdvocates] = useState([]);
+  const [accept, setAccept] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     fetchData();
-    
   }, []);
 
   useFocusEffect(
@@ -21,123 +28,142 @@ const NotificationUser = () => {
       fetchData();
     }, [])
   );
-  
- //console.log(notification);
-    const fetchData = async () => {
-        try {
-          setIsLoading(true);
-          const token = await SecureStore.getItemAsync("authToken");
-          const response = await fetch(`${BASE_URL}/user/getUserNotifications`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            }
-          });
-          const data = await response.json();
-          //console.log(data);
-          setAdvocates(data.notifications);
-          setIsLoading(false);
-          
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      const handleCaseAccept = async(advocateId,problemId,responseId,status)=>{
-        try {
-            console.log(advocateId);
-            const token = await SecureStore.getItemAsync("authToken");
-            const response = await fetch(`${BASE_URL}/user/advocateRequestResponse`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                problemId:'486a50e4-278e-4c30-a5c9-e953b2a05f33',
-                notificationId:responseId,
-                advocateId: advocateId,
-                requestResponse: status
-              })
-            });
-            const data = await response.json();
-            console.log(data.message);
-            
-            setAdvocates(prevAdvocates => prevAdvocates.filter(advocate => advocate.advocateInfo?.advocateId !== advocateId));
-            
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        };
-        
-      
-      
+
+  //console.log(notification);
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const token = await SecureStore.getItemAsync("authToken");
+      const response = await fetch(`${BASE_URL}/user/getUserNotifications`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      //console.log(data);
+      setAdvocates(data.notifications);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const handleCaseAccept = async (
+    advocateId,
+    problemId,
+    notificationId,
+    status
+  ) => {
+    try {
+      console.log(problemId);
+      const token = await SecureStore.getItemAsync("authToken");
+      const response = await fetch(`${BASE_URL}/user/advocateRequestResponse`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          problemId: problemId,
+          advocateId: advocateId,
+          notificationId: notificationId,
+          requestResponse: status,
+        }),
+      });
+      const data = await response.json();
+      console.log(data.message);
+
+      // Trigger a reload of notifications
+      fetchData();
+
+      // Show an alert after the operation is completed
+      Alert.alert("Notification", data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <ScrollView>
-      {advocate.length == 0 && (
-        <Text style={{ margin: 10, fontSize: 24, fontWeight: "500" }}>
-          No notification
-        </Text>
+      {isLoading ? (
+        <Loader visible={true} />
+      ) : (
+        <>
+          {advocate.length === 0 && (
+            <Text style={{ margin: 10, fontSize: 24, fontWeight: "500" }}>
+              No notification
+            </Text>
+          )}
+          {advocate.map((problem) => (
+            <View key={problem._id} style={styles.advocateCard}>
+              <View style={styles.detailsContainer}>
+                <Text style={styles.title}>{problem.title}</Text>
+                <Text style={styles.description}>{problem.description}</Text>
+                <Text style={styles.userName}>
+                  User Name: {problem.advocateInfo?.userName}
+                </Text>
+                <Text style={styles.name}>
+                  Name: {problem.advocateInfo?.name}
+                </Text>
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    { backgroundColor: COLORS.brown4, marginRight: 7 },
+                  ]}
+                  onPress={() =>
+                    handleCaseAccept(
+                      problem.advocateInfo?.advocateId,
+                      problem.problemId,
+                      problem._id,
+                      true
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Accept</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: COLORS.brown1 }]}
+                  onPress={() =>
+                    handleCaseAccept(
+                      problem.advocateInfo?.advocateId,
+                      problem.problemId,
+                      problem._id,
+                      false
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Decline</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </>
       )}
-      {advocate &&
-        advocate.map((problem) => (
-          <View key={problem._id} style={styles.advocateCard}>
-            <View style={styles.detailsContainer}>
-              <Text style={styles.title}>{problem.title}</Text>
-              <Text style={styles.description}>{problem.description}</Text>
-              <Text style={styles.userName}>
-                User Name: {problem.advocateInfo?.userName}
-              </Text>
-              <Text style={styles.name}>
-                Name: {problem.advocateInfo?.name}
-              </Text>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  { backgroundColor: COLORS.brown4, marginRight: 7 },
-                ]}
-                onPress={() =>
-                  handleCaseAccept(problem.advocateInfo?.advocateId,problem?._id,problem?.problemId, true)
-                }
-              >
-                <Text style={styles.buttonText}>Accept</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: COLORS.brown1 }]}
-                onPress={() =>
-                  handleCaseAccept(problem.advocateInfo?.advocateId,problem?._id,problem?.problemId, false)
-                }
-              >
-                <Text style={styles.buttonText}>Decline</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
-      <Loader visible={isLoading} />
     </ScrollView>
   );
-}
+};
 
-export default NotificationUser
+export default NotificationUser;
 
 const styles = StyleSheet.create({
   advocateCard: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 8,
     padding: 16,
     margin: 16,
-    backgroundColor:'#fff',
-    borderRadius:5
+    backgroundColor: "#fff",
+    borderRadius: 5,
   },
   detailsContainer: {
     marginBottom: 8,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   description: {
@@ -157,21 +183,19 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor:'#fff',
-    
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
   },
   button: {
     flex: 1,
     paddingVertical: 8,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-
-  });
+});

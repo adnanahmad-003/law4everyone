@@ -1,12 +1,23 @@
-import React, { useState,useEffect} from 'react';
-import { View, Text, TextInput, Button, StyleSheet,Image, TouchableOpacity, ScrollView,Modal,FlatList } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import COLORS from './../../../../constants/Color';
-import DropDownPicker from 'react-native-dropdown-picker';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Modal,
+  FlatList,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import COLORS from "./../../../../constants/Color";
+import DropDownPicker from "react-native-dropdown-picker";
 import { EvilIcons } from "@expo/vector-icons";
 import * as SecureStore from "expo-secure-store";
-import {BASE_URL} from './../../../../constants/Url';
+import { BASE_URL } from "./../../../../constants/Url";
 import { Entypo } from "@expo/vector-icons";
 const FilterModal = ({
   isOpen,
@@ -69,11 +80,10 @@ const FilterModal = ({
   );
 };
 
-const AddBlog = ({navigation}) => {
-
+const AddBlog = ({ navigation }) => {
   //expertise searching for
   const [expertise, setExpertise] = useState([]);
-  
+
   const predefinedExpertise = [
     "Civil Law",
     "Criminal Law",
@@ -94,13 +104,13 @@ const AddBlog = ({navigation}) => {
     "Cyber Law",
     "Entertainment Law",
     "Insurance Law",
-    "Trusts and Estates Law"
+    "Trusts and Estates Law",
   ];
-  
+
   const [columns, setColumns] = useState(2);
 
   const handleSelectPredefinedExpertise = (item) => {
-    setExpertise((prevExpertise)=>[...prevExpertise, item]);
+    setExpertise((prevExpertise) => [...prevExpertise, item]);
     //console.log(expertise);
   };
 
@@ -117,16 +127,14 @@ const AddBlog = ({navigation}) => {
   const closeFilterModal = () => {
     setIsFilterModalOpen(false);
   };
-  const handleFilter =()=>{
-    console.log('Tags selected');
-  }
+  const handleFilter = () => {
+    console.log("Tags selected");
+  };
 
-
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   //const [tags, setTags] = useState('');
   const [image, setImage] = useState(null);
-
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -141,7 +149,7 @@ const AddBlog = ({navigation}) => {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      await AsyncStorage.setItem('blogImage', result.assets[0].uri);  
+      await AsyncStorage.setItem("blogImage", result.assets[0].uri);
     }
   };
 
@@ -149,38 +157,35 @@ const AddBlog = ({navigation}) => {
     try {
       const token = await SecureStore.getItemAsync("authToken");
       const formData = new FormData();
-      formData.append('title', title);
-      formData.append('description', content);
-      formData.append('tags', JSON.stringify(expertise));
-      formData.append('image', {
+      formData.append("title", title);
+      formData.append("description", content);
+      formData.append("tags", JSON.stringify(expertise));
+      formData.append("image", {
         uri: image,
-        type: 'image/jpg', 
-        name: 'image1.jpg' 
+        type: "image/jpg",
+        name: "image1.jpg",
       });
-  
+
       const response = await fetch(`${BASE_URL}/advocate/postBlog`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
-  
+
       const data = await response.json();
       console.log(expertise);
-      
-  
     } catch (error) {
-      console.error('Error:', error);
-      
+      console.error("Error:", error);
     }
-    setTitle('');
-    setContent('');
+    setTitle("");
+    setContent("");
     setExpertise([]);
     setImage(null);
   };
@@ -215,49 +220,88 @@ const AddBlog = ({navigation}) => {
   };*/
   return (
     <ScrollView style={styles.container}>
-    <View style={styles.incontainer}>
-      
-      <TextInput
-        style={styles.input}
-        value={title}
-        placeholder='Give Title to your post'
-        onChangeText={text => setTitle(text)}
-      />
-      
-      <TouchableOpacity onPress={pickImage} style={{width:"98%" ,height:300,backgroundColor:COLORS.white,alignItems: 'center', justifyContent: 'center',alignSelf:"center",borderRadius:10}}>
-      {image && <Image source={{ uri: image }} style={{  width: "100%", 
-        height: "100%", 
-        resizeMode: 'contain' }} />}
-        {!image&&<Text>Upload your post</Text>}
-      </TouchableOpacity>
-      
-    <Text style={styles.label}>Content:</Text>
-      <TextInput
-        style={styles.input}
-        multiline
-        value={content}
-        onChangeText={text => setContent(text)}
-      />
-      <Text style={styles.label}>Tags:</Text>
-      <TouchableOpacity
-            style={styles.filterButton}
-            onPress={openFilterModal}
+      <View style={styles.incontainer}>
+        <TextInput
+          style={styles.input}
+          value={title}
+          placeholder="Give title to your blog"
+          onChangeText={(text) => setTitle(text)}
+        />
+
+        <TouchableOpacity
+          onPress={pickImage}
+          style={{
+            width: "98%",
+            height: 300,
+            backgroundColor: COLORS.white,
+            alignItems: "center",
+            justifyContent: "center",
+            alignSelf: "center",
+            borderRadius: 10,
+          }}
+        >
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+            />
+          )}
+          {!image && <Text>Upload blog image</Text>}
+        </TouchableOpacity>
+
+        <Text style={styles.label}>Description</Text>
+        <TextInput
+          style={styles.input}
+          multiline
+          value={content}
+          onChangeText={(text) => setContent(text)}
+          placeholder="Give description to your blog"
+        />
+        <Text style={styles.label}>Tags</Text>
+        <TouchableOpacity style={styles.filterButton} onPress={openFilterModal}>
+          <Text
+            style={{
+              marginVertical: 10,
+              backgroundColor: "#fff",
+              marginRight: "auto",
+              paddingVertical: 5,
+              paddingHorizontal: 10,
+              borderRadius: 5,
+            }}
           >
-            <Text style={styles.filterButtonText}>Select Tags</Text>
-          </TouchableOpacity>
-      <Button title="Add Blog" onPress={handleAddBlog}/>
-      <TouchableOpacity onPress={() => navigation.navigate('BlogScreen')}><Text>go back</Text></TouchableOpacity>
-      <FilterModal
-            isOpen={isFilterModalOpen}
-            onClose={closeFilterModal}
-            predefinedExpertise={predefinedExpertise}
-            handleSelectPredefinedExpertise={handleSelectPredefinedExpertise}
-            expertise={expertise}
-            handleRemoveExpertise={handleRemoveExpertise}
-            columns={columns}
-            handleFilter={handleFilter}
-          />
-    </View>
+            Select Tags
+          </Text>
+        </TouchableOpacity>
+        <Button
+          title="Add Blog"
+          color={COLORS.brown1}
+          onPress={handleAddBlog}
+        />
+        <TouchableOpacity onPress={() => navigation.navigate("BlogScreen")}>
+          <Text
+            style={{
+              marginVertical: 15,
+              backgroundColor: "#fff",
+              marginRight: "auto",
+              paddingVertical: 5,
+              paddingHorizontal: 10,
+              borderRadius: 5,
+            }}
+          >
+            go back
+          </Text>
+        </TouchableOpacity>
+        <FilterModal
+          isOpen={isFilterModalOpen}
+          onClose={closeFilterModal}
+          predefinedExpertise={predefinedExpertise}
+          handleSelectPredefinedExpertise={handleSelectPredefinedExpertise}
+          expertise={expertise}
+          handleRemoveExpertise={handleRemoveExpertise}
+          columns={columns}
+          handleFilter={handleFilter}
+        />
+      </View>
     </ScrollView>
   );
 };
@@ -265,27 +309,26 @@ const AddBlog = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:COLORS.white
+    backgroundColor: COLORS.white,
   },
-  incontainer:{
-    marginTop:40,
-    padding:20,
-    backgroundColor:COLORS.purple,
-    borderRadius:10,
-    margin:5
+  incontainer: {
+    marginTop: 40,
+    padding: 20,
+    backgroundColor: COLORS.brown2,
+    borderRadius: 10,
+    margin: 5,
   },
   label: {
     fontSize: 18,
-    marginBottom: 5,
+    marginVertical: 10,
   },
   input: {
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
-    marginBottom:10
-    
+    marginBottom: 10,
   },
   modalContainer: {
     flex: 1,
@@ -344,6 +387,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddBlog
+export default AddBlog;
 
 //const styles = StyleSheet.create({})
