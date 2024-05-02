@@ -1,6 +1,6 @@
 import CharacterListItem from "../../../../components/CharacterListItem";
 import * as SecureStore from "expo-secure-store";
-import {BASE_URL} from './../../../../constants/Url';
+import { BASE_URL } from "./../../../../constants/Url";
 import {
   ActivityIndicator,
   Alert,
@@ -8,7 +8,6 @@ import {
   Text,
   View,
   useWindowDimensions,
-  
 } from "react-native";
 import React, {
   useState,
@@ -17,20 +16,20 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import Loader from './../../../../components/Loader';
+import Loader from "./../../../../components/Loader";
+
 const BlogFeed = () => {
   const [skip, setSkip] = useState(0);
   const limit = 4;
-  const [isLoader,setIsLoader] = useState(false);
+  const [isLoader, setIsLoader] = useState(true); // Initially set loader to true
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState([]);
-
   const [isLiked, setIsLiked] = useState(false);
+  const { width } = useWindowDimensions();
 
   const handleLikeChange = (newIsLiked) => {
     setIsLiked(newIsLiked);
   };
-  const { width } = useWindowDimensions();
 
   const fetchPage = async () => {
     if (loading) {
@@ -40,7 +39,6 @@ const BlogFeed = () => {
     console.log("Fetching: ");
 
     try {
-      
       const token = await SecureStore.getItemAsync("authToken");
       const response = await fetch(
         `${BASE_URL}/user/getBlogs?skip=${skip}&limit=${limit}`,
@@ -54,41 +52,30 @@ const BlogFeed = () => {
       );
       const data = await response.json();
       console.log(data.message);
-      
-      if (data.blogs) {
-        console.log(skip,'skip');
-        setItems(existingItems => [...existingItems, ...data.blogs]);
-          setSkip(skip + limit);
 
-      } 
-      else {
+      if (data.blogs) {
+        console.log(skip, "skip");
+        setItems((existingItems) => [...existingItems, ...data.blogs]);
+        setSkip(skip + limit);
+      } else {
         Alert.alert(
-          'All Caught Up',
-          'You are up to date! No new Feed',
+          "All Caught Up",
+          "You are up to date! No new Feed",
           [
             {
-              text: 'OK',
-              
-            }
+              text: "OK",
+            },
           ],
           { cancelable: false }
         );
       }
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
       setLoading(false);
+      setIsLoader(false); // Set loader to false after the initial fetch
     }
-    
   };
-
-  /*const onRefresh = () => {
-    if (loading) {
-      return;
-    }
-    setItems([]);
-    fetchPage(skip,limit);
-  };*/
 
   useEffect(() => {
     fetchPage();
@@ -105,13 +92,16 @@ const BlogFeed = () => {
     []
   );
 
+  if (isLoader) {
+    return <Loader visible={isLoader} />;
+  }
+
   if (items.length === 0) {
     // this is only to make the debug prop on FlatList Work
     return null;
   }
   return (
-    <View style={{ flex: 1 ,backgroundColor:'#fff'}}>
-       <Loader visible={isLoader} />
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <FlatList
         data={items}
         renderItem={renderItem}
@@ -126,5 +116,3 @@ const BlogFeed = () => {
 };
 
 export default BlogFeed;
-
-// onEndReached={() => fetchPage()}

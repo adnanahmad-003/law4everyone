@@ -73,12 +73,12 @@ const RequestedCases = ({ navigation }) => {
             >
               <Text style={{ margin: 5 }}>View User Profile</Text>
             </TouchableOpacity>
-            <Text style={styles.queryTitle}>{problem.title}</Text>
-            <Text style={styles.queryDetails}>{problem.description}</Text>
+            <Text style={styles.queryTitle}>{problem?.title}</Text>
+            <Text style={styles.queryDetails}>{problem?.description}</Text>
             <Text style={styles.queryLastDate}>
-              Last Date: {new Date(problem.deadline).toDateString()}
+              Last Date: {new Date(problem?.deadline).toDateString()}
             </Text>
-            <Text style={styles.queryStatus}>Status: {prob[index].status}</Text>
+            <Text style={styles.queryStatus}>Status: {prob[index]?.status}</Text>
           </View>
         ))
       )}

@@ -19,7 +19,7 @@ import {
   } from 'expo-av/build/Audio';
 import Loader from '../../../../components/Loader';
 const LawQuery = () => {
-    const{isLoading,setIsLoading}=useState(false);
+    const[isLoading,setIsLoading]=useState(false);
     const [play, setPlay] = useState(false);
     // redux 
     //const response = 'ans'
@@ -114,7 +114,7 @@ const LawQuery = () => {
     //api call for recording
     async function uploadRecording() {
         try {
-            setIsLoading(true);
+            
             const token = await SecureStore.getItemAsync('authToken');
             const uri = recording.getURI();
             //console.log(uri,'1234')
@@ -135,14 +135,15 @@ const LawQuery = () => {
 
                 },
             });
-            setIsLoading(false);
+           
             const data = await response.json();
             console.log(data)
-            console.log(data.message)
+            //console.log(data.message)
             if (data.message)
-                return data.message; // Return the response data if needed
+                return ; // Return the response data if needed
 
             else {
+              dispatch(addString(data.transcription, data.response));
                 return data.response;
             }
         } catch (error) {
@@ -271,7 +272,7 @@ const LawQuery = () => {
               </View>
             )}
 
-            <Loader visible={isLoading} />
+           
           </ScrollView>
         </View>
 

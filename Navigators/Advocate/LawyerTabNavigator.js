@@ -28,12 +28,13 @@ const LawyerTabNavigator = () => {
           const iconName = tabBarIcon[route.name];
           return <MaterialIcons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: COLORS.purple,
-        tabBarInactiveTintColor: '#ccc',
-        tabBarInactiveBackgroundColor: "#f2f2f2",
-        tabBarActiveBackgroundColor: "#e6e6e6",
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: COLORS.brown1,
+        tabBarInactiveBackgroundColor: COLORS.brown4,
+        tabBarActiveBackgroundColor: COLORS.brown1,
         tabBarHideOnKeyboard: true,
-        tabBarItemStyle: { padding: 3 }
+        tabBarItemStyle: {padding:5},
+        tabBarStyle:{height:70}
       })}
       initialRouteName='Home'
     >
