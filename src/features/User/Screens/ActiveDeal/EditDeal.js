@@ -111,12 +111,14 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 20,
+    marginVertical: 20,
     paddingHorizontal: 10,
+    padding:4,
+    borderRadius:5
   },
   error: {
     color: 'red',
-    marginBottom: 10,
+    marginVertical: 10,
   },
 });
 
